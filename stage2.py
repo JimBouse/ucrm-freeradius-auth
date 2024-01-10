@@ -2,13 +2,13 @@ import MySQLdb, urllib, subprocess
 
 #User inputs sql loggin details
 #username = raw_input("Put in the username you set for the sql database: ")
-password = raw_input("Type the password you set to log into sql database: ")
+password = raw_input("Type the password you will use to login to radius@localhost user in the sql database: ")
 
-db = MySQLdb.connect("localhost", "root", password)
+db = MySQLdb.connect("localhost", "root")
 cursor = db.cursor()
 try:
 	cursor.execute('create DATABASE radius')
-	cursor.execute('GRANT ALL ON radius.* TO radius@localhost IDENTIFIED BY "radiuspassword"')
+	cursor.execute('GRANT ALL ON radius.* TO radius@localhost IDENTIFIED BY PASSWORD("'+password+'")')
 	cursor.execute('FLUSH PRIVILEGES')
 	db.commit()
 	print "all good"
