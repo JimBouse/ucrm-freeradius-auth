@@ -1,6 +1,6 @@
 import urllib2
 
-url = "https://raw.githubusercontent.com/jhooper94/ucrm-freeradius-auth/master/master.py"
+url = "https://raw.githubusercontent.com/jimbouse/ucrm-freeradius-auth/master/master.py"
 
 file_name = url.split('/')[-1]
 u = urllib2.urlopen(url)
