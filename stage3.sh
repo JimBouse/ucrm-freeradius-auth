@@ -18,11 +18,11 @@ sudo chown -R freerad:freerad /etc/freeradius/3.0/mods-enabled/sql
 
 systemctl restart freeradius.service
 
-wget https://github.com/lirantal/daloradius/archive/master.zip
+wget https://github.com/JimBouse/ucrm-freeradius-auth/raw/master/daloradius-1.1-2.zip
 
-unzip master.zip
+unzip daloradius-1.1-2.zip
 
-mv daloradius-master/ daloradius
+mv daloradius-1.1-2/ daloradius
 
 cd daloradius
 
@@ -38,7 +38,7 @@ sudo chown -R www-data:www-data /var/www/html/daloradius/
 
 sudo chmod 664 /var/www/html/daloradius/library/daloradius.conf.php
 
-wget https://raw.githubusercontent.com/jhooper94/ucrm-freeradius-auth/master/ucrmsetup.py
+wget https://raw.githubusercontent.com/jimbouse/ucrm-freeradius-auth/master/ucrmsetup.py
 
 python ucrmsetup.py
 
