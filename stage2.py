@@ -17,7 +17,7 @@ except:
 	print "It didn't work"
 
 	
-urllib.urlretrieve ("https://raw.githubusercontent.com/jhooper94/ucrm-freeradius-auth/master/stage3.sh", "stage3.sh")
+urllib.urlretrieve ("https://raw.githubusercontent.com/jimbouse/ucrm-freeradius-auth/master/stage3.sh", "stage3.sh")
 subprocess.call(['chmod', '+x', 'stage3.sh'])
 	
 print "Type: sudo su"
