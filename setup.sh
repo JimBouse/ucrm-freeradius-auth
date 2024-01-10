@@ -26,6 +26,6 @@ sudo pip install configparser
 
 sudo apt-get install python-mysqldb
 
-wget https://raw.githubusercontent.com/jhooper94/ucrm-freeradius-auth/master/stage2.py
+wget https://raw.githubusercontent.com/jimbouse/ucrm-freeradius-auth/master/stage2.py
 
 python stage2.py
