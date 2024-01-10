@@ -6,7 +6,7 @@ mysql -u root -p radius < /etc/freeradius/3.0/mods-config/sql/main/mysql/schema.
 
 sudo ln -s /etc/freeradius/3.0/mods-available/sql /etc/freeradius/3.0/mods-enabled/
 
-wget https://raw.githubusercontent.com/jhooper94/ucrm-freeradius-auth/master/sql
+wget https://raw.githubusercontent.com/jimbouse/ucrm-freeradius-auth/master/sql
 
 sudo rm /etc/freeradius/3.0/mods-enabled/sql
 
