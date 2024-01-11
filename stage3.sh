@@ -49,7 +49,7 @@ sudo chown www-data:www-data /var/log/webhook_request.log
 
 sudo chmod 664 /var/www/html/daloradius/library/daloradius.conf.php
 
-wget https://raw.githubusercontent.com/jimbouse/ucrm-freeradius-auth/master/ucrmsetup.py
+wget https://raw.githubusercontent.com/jimbouse/ucrm-freeradius-auth/master/stage4.py
 
-python ucrmsetup.py
+python stage4.py
 
