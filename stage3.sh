@@ -28,9 +28,9 @@ cd daloradius
 
 read -p "Enter your MySQL password created earlier: " $sqlpasswd
 
-mysql -u radius -p $sqlpasswd < contrib/db/fr2-mysql-daloradius-and-freeradius.sql 
+mysql -u radius -p$sqlpasswd radius < contrib/db/fr2-mysql-daloradius-and-freeradius.sql 
 
-mysql -u radius -p $sqlpasswd < contrib/db/mysql-daloradius.sql
+mysql -u radius -p$sqlpasswd radius < contrib/db/mysql-daloradius.sql
 
 cd ..
 
