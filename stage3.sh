@@ -34,7 +34,7 @@ cd ..
 
 sudo mv daloradius /var/www/html/
 
-wget -P /var/wwww/html/ https://raw.githubusercontent.com/jimbouse/ucrm-freeradius-auth/master/webhook.php 
+wget -O /var/www/html/webhook.php https://raw.githubusercontent.com/jimbouse/ucrm-freeradius-auth/master/webhook.php
 
 sudo chown -R www-data:www-data /var/www/html/
 
