@@ -26,11 +26,11 @@ mv daloradius-1.1-2/ daloradius
 
 cd daloradius
 
-echo "Please enter your radius user password:"
+read -p "Enter your MySQL password created earlier: " $sqlpasswd
 
-mysql -u root -p radius < contrib/db/fr2-mysql-daloradius-and-freeradius.sql 
+mysql -u radius -p $sqlpasswd < contrib/db/fr2-mysql-daloradius-and-freeradius.sql 
 
-mysql -u root -p radius < contrib/db/mysql-daloradius.sql
+mysql -u radius -p $sqlpasswd < contrib/db/mysql-daloradius.sql
 
 cd ..
 
