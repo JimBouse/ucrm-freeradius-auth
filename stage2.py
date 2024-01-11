@@ -27,4 +27,3 @@ subprocess.call(['chmod', '+x', 'stage3.sh'])
 
 print "Created radius user and password."
 print "Type: ./stage3.sh"
-subprocess.call('stage3.sh', shell=True)
