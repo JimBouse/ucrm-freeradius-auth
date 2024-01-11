@@ -2,7 +2,7 @@
 
 sudo apt-add-repository multiverse && sudo apt-get update
 
-sudo apt-get upgrade
+sudo apt-get -y upgrade
 
 sudo apt-get install apache2 python unzip 
 
@@ -24,7 +24,7 @@ sudo pip install requests
 
 sudo pip install configparser
 
-sudo apt-get install python-mysqldb
+sudo apt-get -y install python-mysqldb
 
 wget https://raw.githubusercontent.com/jimbouse/ucrm-freeradius-auth/master/stage2.py
 
