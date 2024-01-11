@@ -7,8 +7,8 @@ password = raw_input("Type the password you will use to login to radius@localhos
 db = MySQLdb.connect("localhost", "root")
 cursor = db.cursor()
 
-createUser = """CREATE USER 'radius'@'localhost' IDENTIFIED BY '{password}'"""
-
+createUser = 'CREATE USER \'radius\'@\'localhost\' IDENTIFIED BY \''+password+'\''
+print "Running: "+createUser
 try:
         cursor.execute('create DATABASE radius')
         cursor.execute(createUser)
