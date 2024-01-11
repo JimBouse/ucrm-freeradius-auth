@@ -34,7 +34,10 @@ mysql -u radius -p $sqlpasswd < contrib/db/mysql-daloradius.sql
 
 cd ..
 
-sudo mv daloradius /var/www/html/
+mv daloradius /var/www/html/
+sed -i '/CONFIG_DB_USER/d' /var/www/html/daloradius/library/daloradius.conf.php
+sed -i '/CONFIG_DB_PASS/d' /var/www/html/daloradius/library/daloradius.conf.php
+
 
 wget -O /var/www/html/webhook.php https://raw.githubusercontent.com/jimbouse/ucrm-freeradius-auth/master/webhook.php
 
