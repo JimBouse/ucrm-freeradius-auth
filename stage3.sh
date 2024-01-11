@@ -41,6 +41,10 @@ wget -O /var/www/html/webhook.php https://raw.githubusercontent.com/jimbouse/ucr
 
 sudo chown -R www-data:www-data /var/www/html/
 
+touch /var/log/webhook_request.log
+
+sudo chown www-data:www-data /var/log/webhook_request.log
+
 sudo chmod 664 /var/www/html/daloradius/library/daloradius.conf.php
 
 wget https://raw.githubusercontent.com/jimbouse/ucrm-freeradius-auth/master/ucrmsetup.py
