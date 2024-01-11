@@ -2,7 +2,7 @@
 
 sudo apt-get install freeradius freeradius-mysql freeradius-utils
 
-mysql -u root -p radius < /etc/freeradius/3.0/mods-config/sql/main/mysql/schema.sql
+mysql -u root radius < /etc/freeradius/3.0/mods-config/sql/main/mysql/schema.sql
 
 sudo ln -s /etc/freeradius/3.0/mods-available/sql /etc/freeradius/3.0/mods-enabled/
 
@@ -26,11 +26,9 @@ mv daloradius-1.1-2/ daloradius
 
 cd daloradius
 
-read -p "Enter your MySQL password created earlier: " $sqlpasswd
+mysql -u root radius < contrib/db/fr2-mysql-daloradius-and-freeradius.sql 
 
-mysql -u radius -p$sqlpasswd radius < contrib/db/fr2-mysql-daloradius-and-freeradius.sql 
-
-mysql -u radius -p$sqlpasswd radius < contrib/db/mysql-daloradius.sql
+mysql -u root radius < contrib/db/mysql-daloradius.sql
 
 cd ..
 
