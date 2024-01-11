@@ -1,6 +1,6 @@
 <?php
 $fp = fopen('/var/log/webhook_request.log', 'a');
-fwrite($fp, "\n\n---TWILIO LOOKUP--- /twilio/investigateDevices_step1.php");
+fwrite($fp, "\n\n---webhook.php request--- /var/www/html/webhook.php");
 if(strcasecmp($_SERVER['REQUEST_METHOD'], 'POST') != 0){
     throw new Exception('Request method must be POST!');
 }
