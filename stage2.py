@@ -11,10 +11,10 @@ try:
 	cursor.execute('GRANT ALL ON radius.* TO radius@localhost IDENTIFIED BY PASSWORD("'+password+'")')
 	cursor.execute('FLUSH PRIVILEGES')
 	db.commit()
-	print "all good"
+	print "Successfully created RADIUS database."
 except:
 	db.rollback()
-	print "It didn't work"
+	print "Creation of RADIUS database or creating user failed."
 
 	
 urllib.urlretrieve ("https://raw.githubusercontent.com/jimbouse/ucrm-freeradius-auth/master/stage3.sh", "stage3.sh")
