@@ -6,20 +6,25 @@ password = raw_input("Type the password you will use to login to radius@localhos
 
 db = MySQLdb.connect("localhost", "root")
 cursor = db.cursor()
-try:
-	cursor.execute('create DATABASE radius')
-	cursor.execute('CREATE USER radius@localhost IDENTIFIED BY %', (password))
-	cursor.execute('GRANT ALL ON radius.* TO radius@localhost')
-	cursor.execute('FLUSH PRIVILEGES')
-	db.commit()
-	print "Successfully created RADIUS database."
-except:
-	db.rollback()
-	print "Creation of RADIUS database or creating user failed."
 
-	
+createUser = """CREATE USER 'radius'@'localhost' IDENTIFIED BY '{password}'"""
+
+try:
+        cursor.execute('create DATABASE radius')
+        cursor.execute(createUser)
+        cursor.execute('GRANT ALL ON radius.* TO radius@localhost')
+        cursor.execute('FLUSH PRIVILEGES')
+        db.commit()
+        print "Successfully created RADIUS database."
+except (MySQLdb.Error, MySQLdb.Warning) as e:
+        db.rollback()
+        print "Creation of RADIUS database or creating user failed."
+        print(e);
+
+
 urllib.urlretrieve ("https://raw.githubusercontent.com/jimbouse/ucrm-freeradius-auth/master/stage3.sh", "stage3.sh")
 subprocess.call(['chmod', '+x', 'stage3.sh'])
-	
-print "Type: sudo su"
-print "once logged in as root type ./stage3.sh"
+
+print "Created radius user and password."
+print "Type: ./stage3.sh"
+subprocess.call('stage3.sh', shell=True)
