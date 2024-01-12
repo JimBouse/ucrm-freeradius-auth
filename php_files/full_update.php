@@ -21,17 +21,7 @@ foreach ($ucrmServices as $service) {
   curl_setopt($ch, CURLOPT_HTTPHEADER, array(
     "Content-Type: application/json"
   ));
-  $response = curl_exec($ch);
-  if (!curl_errno($ch)) {
-          if ($return_type == 'array') {
-                  return json_decode($response, true);
-          } else {
-                  return $response;
-          }
-  } else {
-          return false;
-  }
-  
+  $response = curl_exec($ch);  
   curl_close($ch);
 }
 ?>
