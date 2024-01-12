@@ -8,7 +8,7 @@ foreach ($ucrmServices as $service) {
   
   $data = array();
   $data['eventName'] = "service.edit";
-  $data['extraData]['entity'] = $service;
+  $data['extraData']['entity'] = $service;
   
   $data_string = json_encode($data);
   $ch=curl_init($url);
