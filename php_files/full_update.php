@@ -4,25 +4,34 @@ require_once("functions.php");
 
 $ucrmServices=ucrmGET("/clients/services");
 foreach ($ucrmServices as $service) {
-  $url = 'http://localhost/webhook.php';
-  
   $data = array();
   $data['eventName'] = "service.edit";
   $data['extraData']['entity'] = $service;
+  $json = json_encode($data)
+    
+  $ch = curl_init();
+  curl_setopt($ch, CURLOPT_URL, "http://localhost/webhook.php");
+  curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+  curl_setopt($ch, CURLOPT_HEADER, FALSE);
   
-  $data_string = json_encode($data);
-  $ch=curl_init($url);
-  curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-  curl_setopt($ch, CURLOPT_POSTFIELDS, array("customer"=>$data_string));
-  curl_setopt($ch, CURLOPT_HEADER, true);
-  curl_setopt($ch, CURLOPT_HTTPHEADER,
-      array(
-          'Content-Type:application/json',
-          'Content-Length: ' . strlen($data_string)
-      )
-  );
+  curl_setopt($ch, CURLOPT_POST, TRUE);
   
-  $result = curl_exec($ch);
+  curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
+  
+  curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+    "Content-Type: application/json"
+  ));
+  $response = curl_exec($ch);
+  if (!curl_errno($ch)) {
+          if ($return_type == 'array') {
+                  return json_decode($response, true);
+          } else {
+                  return $response;
+          }
+  } else {
+          return false;
+  }
+  
   curl_close($ch);
 }
 ?>
