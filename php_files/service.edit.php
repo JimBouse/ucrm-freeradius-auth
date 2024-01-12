@@ -89,12 +89,32 @@ if ($json['extraData']['entity']['servicePlanType'] == 'Internet') {
                                         $result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
 
                                         $radGroupReply_MikrotikRateLimit = 1;
-                                        $sql = "SELECT attribute, value FROM radgroupreply WHERE groupname = '".$json['extraData']['entity']['servicePlanName']."'";
+                                        $radGroupReply_MikrotikAddressListPreparedService = 1;
+                                        $radGroupReply_MikrotikAddressListActiveService = 1;
+                                        $radGroupReply_MikrotikAddressListEndedService = 1;
+                                        $radGroupReply_MikrotikAddressListSuspendedService = 1;
+                                        $sql = "SELECT attribute, value FROM radgroupreply";
                                         $result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
                                         while ($row = mysqli_fetch_assoc($result)) {
                                                 if ($row['attribute'] == 'Mikrotik-Rate-Limit') {
                                                         if ($row['value'] == $json['extraData']['entity']['uploadSpeed']."M/".$json['extraData']['entity']['downloadSpeed']."M") {
                                                                 $radGroupReply_MikrotikRateLimit = 0;
+                                                        }
+                                                }
+                                                if ($row['attribute'] == 'Mikrotik-Address-List') {
+                                                        if ($row['value'] == "Prepared_Service") {
+                                                               $radGroupReply_MikrotikAddressListPreparedService = 0;
+                                                        }
+                                                        if ($row['value'] == "Active_Service") {
+                                                               $radGroupReply_MikrotikAddressListActiveService = 0;
+                                                        }
+                                                        
+                                                        if ($row['value'] == "Ended_Service") {
+                                                               $radGroupReply_MikrotikAddressListEndedService = 0;
+                                                        }
+                                                        
+                                                        if ($row['value'] == "Suspended_Service") {
+                                                               $radGroupReply_MikrotikAddressListSuspendedService = 0;
                                                         }
                                                 }
                                         }
@@ -107,6 +127,48 @@ if ($json['extraData']['entity']['servicePlanType'] == 'Internet') {
                                                 fwrite($fp, "\n".$sql);
                                                 $result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
                                         }
+
+                                        if ($radGroupReply_MikrotikAddressListPreparedService == 1) {
+                                                $sql = "DELETE FROM radgroupreply WHERE groupname ='Prepared_Service' AND attribute = 'Mikrotik-Address-List'";
+                                                fwrite($fp, "\n".$sql);
+                                                $result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
+                                                
+                                                $sql = "INSERT INTO radgroupreply (groupname, attribute, op, value) VALUES ('Prepared_Service', 'Mikrotik-Address-List', ':=', 'Prepared_Service)";
+                                                fwrite($fp, "\n".$sql);
+                                                $result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
+                                        }
+                                        
+                                        if ($radGroupReply_MikrotikAddressListActiveService == 1) {
+                                                $sql = "DELETE FROM radgroupreply WHERE groupname ='Active_Service' AND attribute = 'Mikrotik-Address-List'";
+                                                fwrite($fp, "\n".$sql);
+                                                $result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
+                                                
+                                                $sql = "INSERT INTO radgroupreply (groupname, attribute, op, value) VALUES ('Active_Service', 'Mikrotik-Address-List', ':=', 'Active_Service)";
+                                                fwrite($fp, "\n".$sql);
+                                                $result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
+                                        }
+                                        
+                                        if ($radGroupReply_MikrotikAddressListEndedService == 1) {
+                                                $sql = "DELETE FROM radgroupreply WHERE groupname ='Ended_Service' AND attribute = 'Mikrotik-Address-List'";
+                                                fwrite($fp, "\n".$sql);
+                                                $result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
+                                                
+                                                $sql = "INSERT INTO radgroupreply (groupname, attribute, op, value) VALUES ('Ended_Service', 'Mikrotik-Address-List', ':=', 'Ended_Service)";
+                                                fwrite($fp, "\n".$sql);
+                                                $result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
+                                        }
+                                        
+                                        if ($radGroupReply_MikrotikAddressListSuspendedService == 1) {
+                                                $sql = "DELETE FROM radgroupreply WHERE groupname ='Suspended_Service' AND attribute = 'Mikrotik-Address-List'";
+                                                fwrite($fp, "\n".$sql);
+                                                $result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
+                                                
+                                                $sql = "INSERT INTO radgroupreply (groupname, attribute, op, value) VALUES ('Suspended_Service', 'Mikrotik-Address-List', ':=', 'Suspended_Service)";
+                                                fwrite($fp, "\n".$sql);
+                                                $result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
+                                        }
+
+                                        
                                         if (intval($json['extraData']['entity']['trafficShapingOverrideEnabled']) == 1) {
                                                 $download = $json['extraData']['entity']['downloadSpeedOverride'];
                                                 $upload = $json['extraData']['entity']['uploadSpeedOverride'];
