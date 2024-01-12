@@ -7,7 +7,7 @@ foreach ($ucrmServices as $service) {
   $data = array();
   $data['eventName'] = "service.edit";
   $data['extraData']['entity'] = $service;
-  $json = json_encode($data)
+  $json = json_encode($data);
     
   $ch = curl_init();
   curl_setopt($ch, CURLOPT_URL, "http://localhost/webhook.php");
