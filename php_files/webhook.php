@@ -1,6 +1,8 @@
 <?php
 require_once('config.php');
 require_once('functions.php');
+$fp = fopen('/var/log/webhook_request.log', 'a');
+
 
 $link = mysqli_connect($db_host, $db_user, $db_pass, $db);
 if (!$link) {
@@ -32,7 +34,6 @@ if(!is_array($json)){
 //Process the JSON.
 
 
-$fp = fopen('/var/log/webhook_request.log', 'a');
 
 // fwrite($fp, "\n".print_r($json, TRUE));
 
