@@ -10,10 +10,12 @@ foreach ($json['extraData']['entity']['attributes'] as $attrib) {
                 $rxsignal = $attrib['value'];
         }
 }
-foreach ($json['extraData']['entityBeforeEdit']['attributes'] as $attrib) {
-        if ($attrib['key'] == 'devicemac' && preg_match('/^(?:(?:[0-9a-f]{2}[\:]{1}){5}|(?:[0-9a-f]{2}[-]{1}){5}|(?:[0-9a-f]{2}){5})[0-9a-f]{2}$/i', $attrib['value'])) {
-                $oldmac = $attrib['value'];
-        }
+if (array_key_exists('entityBeforeEdit', $json['extraData'])) {
+	foreach ($json['extraData']['entityBeforeEdit']['attributes'] as $attrib) {
+	        if ($attrib['key'] == 'devicemac' && preg_match('/^(?:(?:[0-9a-f]{2}[\:]{1}){5}|(?:[0-9a-f]{2}[-]{1}){5}|(?:[0-9a-f]{2}){5})[0-9a-f]{2}$/i', $attrib['value'])) {
+	                $oldmac = $attrib['value'];
+	        }
+	}
 }
 //$clientResult = ucrmGET('/clients/'.intval($json['extraData']['entity']['clientId']));
 //fwrite($fp, "\n".print_r($clientResult, TRUE));
