@@ -88,8 +88,25 @@ if ($json['extraData']['entity']['servicePlanType'] == 'Internet') {
                                         fwrite($fp, "\n".$sql);
                                         $result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
 
-
-                                        $sql = "SELECT value
+                                        $radGroupReply_Mikrotik-Rate-Limit = 1;
+                                        $sql = "SELECT attribute, value FROM radgroupreply WHERE groupname = '".$json['extraData']['entity']['servicePlanName']."'";
+                                        $result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
+                                        while ($row = mysqli_fetch_assoc($result)) {
+                                                if ($row['attribute'] == 'Mikrotik-Rate-Limit') {
+                                                        if ($row['value'] == $json['extraData']['entity']['uploadSpeed']."/".$json['extraData']['entity']['downloadSpeed']) {
+                                                                $radGroupReply_Mikrotik-Rate-Limit = 0;
+                                                        }
+                                                }
+                                        }
+                                        if ($radGroupReply_Mikrotik-Rate-Limit == 1) {
+                                                $sql = "DELETE FROM radgroupreply WHERE groupname ='".$json['extraData']['entity']['servicePlanName']."' AND attribute = 'Mikrotik-Rate-Limit'";
+                                                fwrite($fp, "\n".$sql);
+                                                $result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
+                                                
+                                                $sql = "INSERT INTO radgroupreply (groupname, attribute, op, value) VALUES ('".$json['extraData']['entity']['servicePlanName']."', 'Mikrotik-Rate-Limit', ':=', '".$json['extraData']['entity']['uploadSpeed']."/".$json['extraData']['entity']['downloadSpeed']."')";
+                                                fwrite($fp, "\n".$sql);
+                                                $result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
+                                        }
                                         if (intval($json['extraData']['entity']['trafficShapingOverrideEnabled']) == 1) {
                                                 $download = $json['extraData']['entity']['downloadSpeedOverride'];
                                                 $upload = $json['extraData']['entity']['uploadSpeedOverride'];
