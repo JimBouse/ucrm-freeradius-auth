@@ -103,7 +103,7 @@ if ($json['extraData']['entity']['servicePlanType'] == 'Internet') {
                                                 fwrite($fp, "\n".$sql);
                                                 $result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
                                                 
-                                                $sql = "INSERT INTO radgroupreply (groupname, attribute, op, value) VALUES ('".$json['extraData']['entity']['servicePlanName']."', 'Mikrotik-Rate-Limit', ':=', '".$row['value'] == $json['extraData']['entity']['uploadSpeed']."M/".$json['extraData']['entity']['downloadSpeed']."M')";
+                                                $sql = "INSERT INTO radgroupreply (groupname, attribute, op, value) VALUES ('".$json['extraData']['entity']['servicePlanName']."', 'Mikrotik-Rate-Limit', ':=', '".$json['extraData']['entity']['uploadSpeed']."M/".$json['extraData']['entity']['downloadSpeed']."M')";
                                                 fwrite($fp, "\n".$sql);
                                                 $result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
                                         }
