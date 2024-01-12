@@ -130,4 +130,5 @@ if ($json['extraData']['entity']['servicePlanType'] == 'Internet') {
 } else {
         fwrite($fp, "\n".intval($json['extraData']['entity']['id'])." Not an internet service");
 }
+fwrite($fp, "\n");
 ?>
