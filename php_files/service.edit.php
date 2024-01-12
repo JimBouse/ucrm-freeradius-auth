@@ -68,18 +68,18 @@ if ($json['extraData']['entity']['servicePlanType'] == 'Internet') {
 						}
 				}
 				if ($row['attribute'] == 'Mikrotik-Address-List') {
-						if ($row['value'] == "Prepared_Service") {
+						if ($row['value'] == "Service_Prepared") {
 							   $radGroupReply_MikrotikAddressListPreparedService = 0;
 						}
-						if ($row['value'] == "Active_Service") {
+						if ($row['value'] == "Service_Active") {
 							   $radGroupReply_MikrotikAddressListActiveService = 0;
 						}
 						
-						if ($row['value'] == "Ended_Service") {
+						if ($row['value'] == "Service_Ended") {
 							   $radGroupReply_MikrotikAddressListEndedService = 0;
 						}
 						
-						if ($row['value'] == "Suspended_Service") {
+						if ($row['value'] == "Service_Ended") {
 							   $radGroupReply_MikrotikAddressListSuspendedService = 0;
 						}
 				}
@@ -95,41 +95,41 @@ if ($json['extraData']['entity']['servicePlanType'] == 'Internet') {
 		}
 
 		if ($radGroupReply_MikrotikAddressListPreparedService == 1) {
-				$sql = "DELETE FROM radgroupreply WHERE groupname ='Prepared_Service' AND attribute = 'Mikrotik-Address-List'";
+				$sql = "DELETE FROM radgroupreply WHERE groupname ='Service_Prepared' AND attribute = 'Mikrotik-Address-List'";
 				fwrite($fp, "\n".$sql);
 				$result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
 				
-				$sql = "INSERT INTO radgroupreply (groupname, attribute, op, value) VALUES ('Prepared_Service', 'Mikrotik-Address-List', ':=', 'Prepared_Service')";
+				$sql = "INSERT INTO radgroupreply (groupname, attribute, op, value) VALUES ('Service_Prepared', 'Mikrotik-Address-List', ':=', 'Service_Prepared')";
 				fwrite($fp, "\n".$sql);
 				$result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
 		}
 		
 		if ($radGroupReply_MikrotikAddressListActiveService == 1) {
-				$sql = "DELETE FROM radgroupreply WHERE groupname ='Active_Service' AND attribute = 'Mikrotik-Address-List'";
+				$sql = "DELETE FROM radgroupreply WHERE groupname ='Service_Active' AND attribute = 'Mikrotik-Address-List'";
 				fwrite($fp, "\n".$sql);
 				$result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
 				
-				$sql = "INSERT INTO radgroupreply (groupname, attribute, op, value) VALUES ('Active_Service', 'Mikrotik-Address-List', ':=', 'Active_Service')";
+				$sql = "INSERT INTO radgroupreply (groupname, attribute, op, value) VALUES ('Service_Active', 'Mikrotik-Address-List', ':=', 'Service_Active')";
 				fwrite($fp, "\n".$sql);
 				$result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
 		}
 		
 		if ($radGroupReply_MikrotikAddressListEndedService == 1) {
-				$sql = "DELETE FROM radgroupreply WHERE groupname ='Ended_Service' AND attribute = 'Mikrotik-Address-List'";
+				$sql = "DELETE FROM radgroupreply WHERE groupname ='Service_Ended' AND attribute = 'Mikrotik-Address-List'";
 				fwrite($fp, "\n".$sql);
 				$result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
 				
-				$sql = "INSERT INTO radgroupreply (groupname, attribute, op, value) VALUES ('Ended_Service', 'Mikrotik-Address-List', ':=', 'Ended_Service')";
+				$sql = "INSERT INTO radgroupreply (groupname, attribute, op, value) VALUES ('Service_Ended', 'Mikrotik-Address-List', ':=', 'Service_Ended')";
 				fwrite($fp, "\n".$sql);
 				$result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
 		}
 		
 		if ($radGroupReply_MikrotikAddressListSuspendedService == 1) {
-				$sql = "DELETE FROM radgroupreply WHERE groupname ='Suspended_Service' AND attribute = 'Mikrotik-Address-List'";
+				$sql = "DELETE FROM radgroupreply WHERE groupname ='Service_Ended' AND attribute = 'Mikrotik-Address-List'";
 				fwrite($fp, "\n".$sql);
 				$result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
 				
-				$sql = "INSERT INTO radgroupreply (groupname, attribute, op, value) VALUES ('Suspended_Service', 'Mikrotik-Address-List', ':=', 'Suspended_Service')";
+				$sql = "INSERT INTO radgroupreply (groupname, attribute, op, value) VALUES ('Service_Ended', 'Mikrotik-Address-List', ':=', 'Service_Ended')";
 				fwrite($fp, "\n".$sql);
 				$result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
 		}
