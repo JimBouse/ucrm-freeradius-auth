@@ -34,7 +34,7 @@ if ($json['extraData']['entity']['servicePlanType'] == 'Internet') {
 		fwrite($fp, "\n".$sql);
 		$result=mysqli_query($link,$sql) or die(mysqli_error($link)." Q=".$sql);
 
-		$sql = "INSERT INTO radusergroup(username, groupname, priority) VALUES ('".$mac."', '".$json['extraData']['entity']['servicePlanName']."', 0)";
+		$sql = "INSERT INTO radusergroup(username, groupname, priority) VALUES ('".$mac."', '".$json['extraData']['entity']['servicePlanName']."', 10)";
 		fwrite($fp, "\n".$sql);
 		$result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
 
