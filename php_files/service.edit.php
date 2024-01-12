@@ -63,24 +63,36 @@ if ($json['extraData']['entity']['servicePlanType'] == 'Internet') {
                                                 $overrideEnabled = 0;
                                         }
 
-                                        $sql = "SELECT value FROM radcheck WHERE username = '".$mac."'";
+                                        $sql = "DELETE FROM radcheck WHERE username = '".$mac."'";
+                                        fwrite($fp, "\n".$sql);
                                         $result=mysqli_query($link,$sql) or die(mysqli_error($link)." Q=".$sql);
-                                        while ($row = mysqli_fetch_assoc($result)) {
-                                                $updateRadCheck = "UPDATE radcheck SET value = 'Accept' WHERE username = '".$mac."'";
-                                        }
-                                        if (isset($updateRadCheck)) {
-                                                $sql = $updateRadCheck;
-                                        } else {
-                                                $sql = "REPLACE INTO radcheck(username, attribute, op, value) VALUES ('".$mac."', 'Auth-type', ':=', 'Accept')";
-                                        }
+
+                                        $sql = "REPLACE INTO radcheck(username, attribute, op, value) VALUES ('".$mac."', 'Auth-type', ':=', 'Accept')";
                                         fwrite($fp, "\n".$sql);
                                         $result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
 
-                                        $sql = "REPLACE INTO radusergroup(username, groupname, priority) VALUES ('".$mac."', '".$json['extraData']['entity']['servicePlanName']."', 1)";
+
+                                        $sql = "DELETE FROM radusergroup WHERE username = '".$mac."'";
+                                        fwrite($fp, "\n".$sql);
+                                        $result=mysqli_query($link,$sql) or die(mysqli_error($link)." Q=".$sql);
+
+                                        $sql = "INSERT INTO radusergroup(username, groupname, priority) VALUES ('".$mac."', '".$json['extraData']['entity']['servicePlanName']."', 1)";
                                         fwrite($fp, "\n".$sql);
                                         $result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
 
-                                        $sql = "REPLACE INTO userbillinfo(username, planName) VALUES ('".$mac."', '".$json['extraData']['entity']['servicePlanName']."')";
+                                        $sql = "DELETE FROM userbillinfo WHERE username = '".$mac."'";
+                                        fwrite($fp, "\n".$sql);
+                                        $result=mysqli_query($link,$sql) or die(mysqli_error($link)." Q=".$sql);
+                                        
+                                        $sql = "INSERT INTO userbillinfo(username, planName) VALUES ('".$mac."', '".$json['extraData']['entity']['servicePlanName']."')";
+                                        fwrite($fp, "\n".$sql);
+                                        $result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
+                                        
+                                        $sql = "DELETE FROM userinfo WHERE username = '".$mac."'";
+                                        fwrite($fp, "\n".$sql);
+                                        $result=mysqli_query($link,$sql) or die(mysqli_error($link)." Q=".$sql);
+                                        
+                                        $sql = "INSERT INTO userinfo(username, firstame) VALUES ('".$mac."', '".$mac."')";
                                         fwrite($fp, "\n".$sql);
                                         $result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
 
