@@ -15,10 +15,10 @@ foreach ($json['extraData']['entityBeforeEdit']['attributes'] as $attrib) {
                 $oldmac = $attrib['value'];
         }
 }
-$clientResult = ucrmGET('/clients/'.intval($json['extraData']['entity']['clientId']));
-fwrite($fp, "\n".print_r($clientResult, TRUE));
+//$clientResult = ucrmGET('/clients/'.intval($json['extraData']['entity']['clientId']));
+//fwrite($fp, "\n".print_r($clientResult, TRUE));
 if ($json['extraData']['entity']['servicePlanType'] == 'Internet') {
-        fwrite($fp, "\n".$_SERVER['REMOTE_ADDR'].":\n".print_r($json, TRUE));
+        //fwrite($fp, "\n".$_SERVER['REMOTE_ADDR'].":\n".print_r($json, TRUE));
         if (isset($mac)) {
                 // found a mac address.  Now to check on things.
 
