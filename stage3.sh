@@ -35,7 +35,11 @@ mysql -u root radius < contrib/db/fr2-mysql-daloradius-and-freeradius.sql
 mysql -u root radius < contrib/db/mysql-daloradius.sql
 
 mysql -u root radius -e "ALTER TABLE radacct ADD acctupdatetime datetime NULL default NULL AFTER acctstarttime"
-
+mysql -u root radius -e "ALTER TABLE radacct ADD acctinterval int(12) default NULL AFTER acctstoptime"
+mysql -u root radius -e "ALTER TABLE radacct ADD framedipv6address varchar(32) default NULL AFTER framedipaddress"
+mysql -u root radius -e "ALTER TABLE radacct ADD framedipv6prefix varchar(32) default NULL AFTER framedipaddress"
+mysql -u root radius -e "ALTER TABLE radacct ADD framedinterfaceid varchar(32) default NULL AFTER framedipaddress"
+mysql -u root radius -e "ALTER TABLE radacct ADD delegatedipv6prefix varchar(32) default NULL AFTER framedipaddress"
 
 
 cd ..
