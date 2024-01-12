@@ -88,17 +88,17 @@ if ($json['extraData']['entity']['servicePlanType'] == 'Internet') {
                                         fwrite($fp, "\n".$sql);
                                         $result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
 
-                                        $radGroupReply_MikrotikRateLimit = 1;
+                                        $radGroupReplyMikrotikRateLimit = 1;
                                         $sql = "SELECT attribute, value FROM radgroupreply WHERE groupname = '".$json['extraData']['entity']['servicePlanName']."'";
                                         $result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
                                         while ($row = mysqli_fetch_assoc($result)) {
                                                 if ($row['attribute'] == 'Mikrotik-Rate-Limit') {
                                                         if ($row['value'] == $json['extraData']['entity']['uploadSpeed']."/".$json['extraData']['entity']['downloadSpeed']) {
-                                                                $radGroupReply_MikrotikRateLimit = 0;
+                                                                $radGroupReplyMikrotikRateLimit = 0;
                                                         }
                                                 }
                                         }
-                                        if ($radGroupReply_MikrotikRateLimit == 1) {
+                                        if ($radGroupReplyMikrotikRateLimit == 1) {
                                                 $sql = "DELETE FROM radgroupreply WHERE groupname ='".$json['extraData']['entity']['servicePlanName']."' AND attribute = 'Mikrotik-Rate-Limit'";
                                                 fwrite($fp, "\n".$sql);
                                                 $result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
