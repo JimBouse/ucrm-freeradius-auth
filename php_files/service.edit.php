@@ -38,7 +38,7 @@ if ($json['extraData']['entity']['servicePlanType'] == 'Internet') {
                                 } else {
 
                                         // see if an existing profile (not this one) has the same MAC address.  Remove the mac address from the old profile if so.
-                                        $nonActiveServices = ucrmGET("clients/services?customAttributeId=2&customAttributeValue=".$mac);
+                                        $nonActiveServices = ucrmGET("/clients/services?customAttributeId=2&customAttributeValue=".$mac);
                                         foreach ($nonActiveServices as $oldService) {
                                                 if (intval($oldService['status']) !== 0 && intval($oldService['status']) !== 1) {
                                                         fwrite($fp, "\nAlready ENDED service for MAC ".$mac." detected.  Removing reference to MAC");
