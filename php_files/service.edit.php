@@ -147,7 +147,11 @@ if ($json['extraData']['entity']['servicePlanType'] == 'Internet') {
 
 		switch (intval($json['extraData']['entity']['status'])) {
 				case 0: // Prepared
-						fwrite($fp, "\nPrepared Service");
+					fwrite($fp, "\nPrepared Service");
+					$sql = "INSERT INTO radusergroup(username, groupname, priority) VALUES ('".$mac."', 'Service_Prepared', 1)";
+                                        fwrite($fp, "\n".$sql);
+                                        $result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
+
 
 						// break;
 				case 1: // Active
@@ -175,7 +179,7 @@ if ($json['extraData']['entity']['servicePlanType'] == 'Internet') {
 							        }
 							}
 
-                                                        $sql = "INSERT INTO radusergroup(username, groupname, priority) VALUES ('".$mac."', 'Service_Active', 0)";
+                                                        $sql = "INSERT INTO radusergroup(username, groupname, priority) VALUES ('".$mac."', 'Service_Active', 1)";
 		                                        fwrite($fp, "\n".$sql);
 		                                        $result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
 
@@ -187,12 +191,12 @@ if ($json['extraData']['entity']['servicePlanType'] == 'Internet') {
 						break;
 				case 2: // Ended
 						fwrite($fp, "\nEnded");
-						$sql = "INSERT INTO radusergroup(username, groupname, priority) VALUES ('".$mac."', 'Service_Ended', 0)";
+						$sql = "INSERT INTO radusergroup(username, groupname, priority) VALUES ('".$mac."', 'Service_Ended', 1)";
                                                 fwrite($fp, "\n".$sql);
                                                 $result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
 				case 3: // Suspended
 						fwrite($fp, "\nSuspended");
-                                                $sql = "INSERT INTO radusergroup(username, groupname, priority) VALUES ('".$mac."', 'Service_Ended', 0)";
+                                                $sql = "INSERT INTO radusergroup(username, groupname, priority) VALUES ('".$mac."', 'Service_Ended', 1)";
                                                 fwrite($fp, "\n".$sql);
                                                 $result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
 
