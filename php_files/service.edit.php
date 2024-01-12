@@ -79,7 +79,7 @@ if ($json['extraData']['entity']['servicePlanType'] == 'Internet') {
 							   $radGroupReply_MikrotikAddressListEndedService = 0;
 						}
 						
-						if ($row['value'] == "Service_Ended") {
+						if ($row['value'] == "Service_Suspended") {
 							   $radGroupReply_MikrotikAddressListSuspendedService = 0;
 						}
 				}
