@@ -32,7 +32,7 @@ if(!is_array($json)){
 //Process the JSON.
 
 
-$fp = fopen('request.log', 'a');
+$fp = fopen('/var/log/webhook_request.log', 'a');
 
 // fwrite($fp, "\n".print_r($json, TRUE));
 
