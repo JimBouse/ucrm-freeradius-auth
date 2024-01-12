@@ -10,9 +10,9 @@ wget https://raw.githubusercontent.com/jimbouse/ucrm-freeradius-auth/master/sql
 
 sudo rm /etc/freeradius/3.0/mods-enabled/sql
 
-read -p "Enter your MySQL radius password: " $sqlpass
+read -p "Enter your MySQL radius password: " sqlpass; 
 
-sed -i "/password.=.*/c\password = $sqlpass" /etc/freeradius/3.0/mods-enabled/sql
+sed -i "/password.=.*/c\password = $sqlpass" sql;
 
 sudo mv sql /etc/freeradius/3.0/mods-enabled/sql
 
