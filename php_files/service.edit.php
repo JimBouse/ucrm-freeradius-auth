@@ -133,7 +133,7 @@ if ($json['extraData']['entity']['servicePlanType'] == 'Internet') {
                                                 fwrite($fp, "\n".$sql);
                                                 $result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
                                                 
-                                                $sql = "INSERT INTO radgroupreply (groupname, attribute, op, value) VALUES ('Prepared_Service', 'Mikrotik-Address-List', ':=', 'Prepared_Service)";
+                                                $sql = "INSERT INTO radgroupreply (groupname, attribute, op, value) VALUES ('Prepared_Service', 'Mikrotik-Address-List', ':=', 'Prepared_Service')";
                                                 fwrite($fp, "\n".$sql);
                                                 $result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
                                         }
@@ -143,7 +143,7 @@ if ($json['extraData']['entity']['servicePlanType'] == 'Internet') {
                                                 fwrite($fp, "\n".$sql);
                                                 $result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
                                                 
-                                                $sql = "INSERT INTO radgroupreply (groupname, attribute, op, value) VALUES ('Active_Service', 'Mikrotik-Address-List', ':=', 'Active_Service)";
+                                                $sql = "INSERT INTO radgroupreply (groupname, attribute, op, value) VALUES ('Active_Service', 'Mikrotik-Address-List', ':=', 'Active_Service')";
                                                 fwrite($fp, "\n".$sql);
                                                 $result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
                                         }
@@ -153,7 +153,7 @@ if ($json['extraData']['entity']['servicePlanType'] == 'Internet') {
                                                 fwrite($fp, "\n".$sql);
                                                 $result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
                                                 
-                                                $sql = "INSERT INTO radgroupreply (groupname, attribute, op, value) VALUES ('Ended_Service', 'Mikrotik-Address-List', ':=', 'Ended_Service)";
+                                                $sql = "INSERT INTO radgroupreply (groupname, attribute, op, value) VALUES ('Ended_Service', 'Mikrotik-Address-List', ':=', 'Ended_Service')";
                                                 fwrite($fp, "\n".$sql);
                                                 $result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
                                         }
@@ -163,7 +163,7 @@ if ($json['extraData']['entity']['servicePlanType'] == 'Internet') {
                                                 fwrite($fp, "\n".$sql);
                                                 $result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
                                                 
-                                                $sql = "INSERT INTO radgroupreply (groupname, attribute, op, value) VALUES ('Suspended_Service', 'Mikrotik-Address-List', ':=', 'Suspended_Service)";
+                                                $sql = "INSERT INTO radgroupreply (groupname, attribute, op, value) VALUES ('Suspended_Service', 'Mikrotik-Address-List', ':=', 'Suspended_Service')";
                                                 fwrite($fp, "\n".$sql);
                                                 $result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
                                         }
