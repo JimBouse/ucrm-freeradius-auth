@@ -15,10 +15,10 @@ foreach ($json['extraData']['entityBeforeEdit']['attributes'] as $attrib) {
                 $oldmac = $attrib['value'];
         }
 }
-//$clientResult = ucrmGET('clients/'.intval($json['extraData']['entity']['clientId']));
-
+$clientResult = ucrmGET('/clients/'.intval($json['extraData']['entity']['clientId']));
+fwrite($fp, "\n".print_r($clientResult, TRUE));
 if ($json['extraData']['entity']['servicePlanType'] == 'Internet') {
-        // fwrite($fp, "\n".$_SERVER['REMOTE_ADDR'].":\n".print_r($json, TRUE));
+        fwrite($fp, "\n".$_SERVER['REMOTE_ADDR'].":\n".print_r($json, TRUE));
         if (isset($mac)) {
                 // found a mac address.  Now to check on things.
 
@@ -53,15 +53,7 @@ if ($json['extraData']['entity']['servicePlanType'] == 'Internet') {
                                                 }
                                         }
 
-                                        if (intval($json['extraData']['entity']['trafficShapingOverrideEnabled']) == 1) {
-                                                $download = $json['extraData']['entity']['downloadSpeedOverride'];
-                                                $upload = $json['extraData']['entity']['uploadSpeedOverride'];
-                                                $overrideEnabled = 1;
-                                        } else {
-                                                $download = $json['extraData']['entity']['downloadSpeed'];
-                                                $upload = $json['extraData']['entity']['uploadSpeed'];
-                                                $overrideEnabled = 0;
-                                        }
+
 
                                         $sql = "DELETE FROM radcheck WHERE username = '".$mac."'";
                                         fwrite($fp, "\n".$sql);
@@ -96,6 +88,17 @@ if ($json['extraData']['entity']['servicePlanType'] == 'Internet') {
                                         fwrite($fp, "\n".$sql);
                                         $result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
 
+
+                                        $sql = "SELECT value
+                                        if (intval($json['extraData']['entity']['trafficShapingOverrideEnabled']) == 1) {
+                                                $download = $json['extraData']['entity']['downloadSpeedOverride'];
+                                                $upload = $json['extraData']['entity']['uploadSpeedOverride'];
+                                                $overrideEnabled = 1;
+                                        } else {
+                                                $download = $json['extraData']['entity']['downloadSpeed'];
+                                                $upload = $json['extraData']['entity']['uploadSpeed'];
+                                                $overrideEnabled = 0;
+                                        }
                                 }
 
                                 break;
