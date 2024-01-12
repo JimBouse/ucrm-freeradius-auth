@@ -34,6 +34,10 @@ mysql -u root radius < contrib/db/fr2-mysql-daloradius-and-freeradius.sql
 
 mysql -u root radius < contrib/db/mysql-daloradius.sql
 
+mysql -u root radius -e "ALTER TABLE radacct ADD acctupdatetime datetime NULL default NULL AFTER acctstarttime"
+
+
+
 cd ..
 
 mv daloradius /var/www/html/
