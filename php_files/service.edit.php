@@ -92,7 +92,7 @@ if ($json['extraData']['entity']['servicePlanType'] == 'Internet') {
                                         fwrite($fp, "\n".$sql);
                                         $result=mysqli_query($link,$sql) or die(mysqli_error($link)." Q=".$sql);
                                         
-                                        $sql = "INSERT INTO userinfo (username, firstname) VALUES ('".$mac."', '".$mac."')";
+                                        $sql = "INSERT INTO userinfo (username, firstname, lastname) VALUES ('".$mac."', '".$json['extraData']['entity']['clientId']."', '".$json['extraData']['entity']['id']."')";
                                         fwrite($fp, "\n".$sql);
                                         $result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
 
