@@ -158,38 +158,30 @@ if ($json['extraData']['entity']['servicePlanType'] == 'Internet') {
 						// break;
 				case 1: // Active
 						fwrite($fp, "\nActive Service");
-						if ($json['extraData']['entity']['hasOutage'] == 1 && empty($json['extraData']['entityBeforeEdit']['hasOutage'])) {
-								// has outage
-								fwrite($fp, "\n".intval($json['extraData']['entity']['id'])." Outage Alert - Has Outage, add to outage list");
-						} elseif (empty($json['extraData']['entity']['hasOutage']) && $json['extraData']['entityBeforeEdit']['hasOutage'] == 1) {
-								// remove from outage list
-								fwrite($fp, "\n".intval($json['extraData']['entity']['id'])." Outage Alert - Outage Cleared");
-						} else {
-                                                        // see if an existing profile (not this one) has the same MAC address.  Remove the mac address from the old profile if so.
-							$nonActiveServices = ucrmGET("/clients/services?customAttributeId=2&customAttributeValue=".$mac);
-							foreach ($nonActiveServices as $oldService) {
-								if (intval($oldService['status']) !== 0 && intval($oldService['status']) !== 1) {
-									fwrite($fp, "\nAlready ENDED service for MAC ".$mac." detected.  Removing reference to MAC");
-									foreach ($oldService['attributes'] as $attrib) {
-										if ($attrib['key'] == "devicemac" && strtolower($attrib['value']) == strtolower($mac)) {
-											$uArr = [];
-											$uArr['attributes'][] = array('value' => "", 'customAttributeId' => 2);
-											$uDelete = ucrmPATCH("clients/services/".$oldService['id'], json_encode($uArr));
-											fwrite($fp, "\nRemoved MAC ".$mac." from service ID: ".$oldService['id']);
-										}
+						
+						// see if an existing profile (not this one) has the same MAC address.  Remove the mac address from the old profile if so.
+						$nonActiveServices = ucrmGET("/clients/services?customAttributeId=2&customAttributeValue=".$mac);
+						foreach ($nonActiveServices as $oldService) {
+							if (intval($oldService['status']) !== 0 && intval($oldService['status']) !== 1) {
+								fwrite($fp, "\nAlready ENDED service for MAC ".$mac." detected.  Removing reference to MAC");
+								foreach ($oldService['attributes'] as $attrib) {
+									if ($attrib['key'] == "devicemac" && strtolower($attrib['value']) == strtolower($mac)) {
+										$uArr = [];
+										$uArr['attributes'][] = array('value' => "", 'customAttributeId' => 2);
+										$uDelete = ucrmPATCH("clients/services/".$oldService['id'], json_encode($uArr));
+										fwrite($fp, "\nRemoved MAC ".$mac." from service ID: ".$oldService['id']);
 									}
-							        }
+								}
 							}
+						}
 
-                                                        $sql = "INSERT INTO radusergroup(username, groupname, priority) VALUES ('".$mac."', 'Service_Active', 1)";
-		                                        fwrite($fp, "\n".$sql);
-		                                        $result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
+						$sql = "INSERT INTO radusergroup(username, groupname, priority) VALUES ('".$mac."', 'Service_Active', 1)";
+						fwrite($fp, "\n".$sql);
+						$result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
 
 
 
 								
-						}
-
 						break;
 				case 2: // Ended
 						fwrite($fp, "\nEnded");
