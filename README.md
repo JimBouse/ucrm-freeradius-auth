@@ -5,6 +5,7 @@
 # wget https://raw.githubusercontent.com/jimbouse/ucrm-freeradius-auth/master/setup.sh && chmod +x setup.sh && ./setup.sh
 
 After setup, log into UCRM and add a webhook pointing at your server.  http://your.radius.server.address/webhook.php
+Webhook event types: service.activate, service.add, service.archive, service.edit, service.end, service.postpone, service.suspend, service.suspend_cancel
 
 Then run "php /var/www/html/full_update.php" to initiate the full sync.
 After that, it should stay syncronized wtih any save of a service profile.
