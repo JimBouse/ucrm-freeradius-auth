@@ -10,6 +10,8 @@ wget https://raw.githubusercontent.com/jimbouse/ucrm-freeradius-auth/master/sql
 
 sudo rm /etc/freeradius/3.0/mods-enabled/sql
 
+sed -i "/password.=.*/c\password = RadPass" /etc/freeradius/3.0/mods-enabled/sql
+
 sudo mv sql /etc/freeradius/3.0/mods-enabled/sql
 
 sudo chgrp -h freerad /etc/freeradius/3.0/mods-available/sql
