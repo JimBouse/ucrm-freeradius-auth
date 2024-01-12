@@ -127,11 +127,11 @@ if ($json['extraData']['entity']['servicePlanType'] == 'Internet') {
 		}
 		
 		if ($radGroupReply_MikrotikAddressListSuspendedService == 1) {
-				$sql = "DELETE FROM radgroupreply WHERE groupname ='Service_Ended' AND attribute = 'Mikrotik-Address-List'";
+				$sql = "DELETE FROM radgroupreply WHERE groupname ='Service_Suspended' AND attribute = 'Mikrotik-Address-List'";
 				fwrite($fp, "\n".$sql);
 				$result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
 				
-				$sql = "INSERT INTO radgroupreply (groupname, attribute, op, value) VALUES ('Service_Ended', 'Mikrotik-Address-List', ':=', 'Service_Ended')";
+				$sql = "INSERT INTO radgroupreply (groupname, attribute, op, value) VALUES ('Service_Suspended', 'Mikrotik-Address-List', ':=', 'Service_Suspended')";
 				fwrite($fp, "\n".$sql);
 				$result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
 		}
@@ -190,7 +190,7 @@ if ($json['extraData']['entity']['servicePlanType'] == 'Internet') {
                                                 $result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
 				case 3: // Suspended
 						fwrite($fp, "\nSuspended");
-                                                $sql = "INSERT INTO radusergroup(username, groupname, priority) VALUES ('".$mac."', 'Service_Ended', 1)";
+                                                $sql = "INSERT INTO radusergroup(username, groupname, priority) VALUES ('".$mac."', 'Service_Suspended', 1)";
                                                 fwrite($fp, "\n".$sql);
                                                 $result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
 
