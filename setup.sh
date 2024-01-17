@@ -1,7 +1,7 @@
 #!/bin/bash
 clear;
 printf '\n\nFreeRadius 3.2.3 + MariaDB (MySQL) Setup Script';
-printf '\nJim Bouse - jim@brazoswifi.com - 2024-01-16\n';
+printf '\nJim Bouse - jim@brazoswifi.com - 2024-01-17\n';
 printf '\nThis script is intended to be run on a brand new (unconfigured) Ubuntu 24.04 server.';
 printf '\nIf this server has previous configuration, you may not want to use the script.';
 printf '\n\n';
@@ -94,6 +94,15 @@ read -p "Create a password for the 'radius' user for the mysql 'radius' database
  wget -O /var/www/html/full_update.php https://raw.githubusercontent.com/jimbouse/ucrm-freeradius-auth/master/php_files/full_update.php
 
  printf "Creating config.php.\n";
+ echo "<?php" > /var/www/html/config.php";
+ echo "$db_host = 'localhost';" >> /var/www/html/config.php";
+ echo "$db_user = 'radius';" >> /var/www/html/config.php";
+ echo "$db_pass = '$sqlpass';" >> /var/www/html/config.php";
+ echo "$db = 'radius';" >> /var/www/html/config.php";
+ echo "$uispUrl = '$ucrmhost';" >> /var/www/html/config.php";
+ echo "$uispKey = '$ucrmkey';" >> /var/www/html/config.php";
+ echo "?>"  >> /var/www/html/config.php";
+
 
  sudo chown -R www-data:www-data /var/www/html/
 
