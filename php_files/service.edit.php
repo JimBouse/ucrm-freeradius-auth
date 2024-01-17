@@ -92,7 +92,7 @@ if ($json['extraData']['entity']['servicePlanType'] == 'Internet') {
 				fwrite($fp, "\n".$sql);
 				$result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
 				
-				$sql = "INSERT INTO radgroupreply (groupname, attribute, op, value) VALUES ('".$json['extraData']['entity']['servicePlanName']."', 'Mikrotik-Rate-Limit', ':=', '".$json['extraData']['entity']['uploadSpeed']."M/".$json['extraData']['entity']['downloadSpeed']."M')";
+				$sql = "INSERT INTO radgroupreply (groupname, attribute, op, value) VALUES ('".$json['extraData']['entity']['servicePlanName']."', 'Mikrotik-Rate-Limit', ':=', '".$json['extraData']['entity']['uploadSpeed']."M/".$json['extraData']['entity']['downloadSpeed']."M'),('".$json['extraData']['entity']['servicePlanName']."', 'Fall-Through', '=', 'Yes')";
 				fwrite($fp, "\n".$sql);
 				$result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
 		}
@@ -102,7 +102,7 @@ if ($json['extraData']['entity']['servicePlanType'] == 'Internet') {
 				fwrite($fp, "\n".$sql);
 				$result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
 				
-				$sql = "INSERT INTO radgroupreply (groupname, attribute, op, value) VALUES ('Service_Prepared', 'Mikrotik-Address-List', ':=', 'Service_Prepared')";
+				$sql = "INSERT INTO radgroupreply (groupname, attribute, op, value) VALUES ('Service_Prepared', 'Mikrotik-Address-List', ':=', 'Service_Prepared'),('Service_Prepared', 'Fall-Through', '=', 'Yes')";
 				fwrite($fp, "\n".$sql);
 				$result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
 		}
@@ -112,7 +112,7 @@ if ($json['extraData']['entity']['servicePlanType'] == 'Internet') {
 				fwrite($fp, "\n".$sql);
 				$result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
 				
-				$sql = "INSERT INTO radgroupreply (groupname, attribute, op, value) VALUES ('Service_Active', 'Mikrotik-Address-List', ':=', 'Service_Active')";
+				$sql = "INSERT INTO radgroupreply (groupname, attribute, op, value) VALUES ('Service_Active', 'Mikrotik-Address-List', ':=', 'Service_Active'),('Service_Active', 'Fall-Through', '=', 'Yes')";
 				fwrite($fp, "\n".$sql);
 				$result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
 		}
@@ -122,7 +122,7 @@ if ($json['extraData']['entity']['servicePlanType'] == 'Internet') {
 				fwrite($fp, "\n".$sql);
 				$result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
 				
-				$sql = "INSERT INTO radgroupreply (groupname, attribute, op, value) VALUES ('Service_Ended', 'Mikrotik-Address-List', ':=', 'Service_Ended')";
+				$sql = "INSERT INTO radgroupreply (groupname, attribute, op, value) VALUES ('Service_Ended', 'Mikrotik-Address-List', ':=', 'Service_Ended'),('Service_Ended', 'Fall-Through', '=', 'Yes')";
 				fwrite($fp, "\n".$sql);
 				$result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
 		}
@@ -132,7 +132,7 @@ if ($json['extraData']['entity']['servicePlanType'] == 'Internet') {
 				fwrite($fp, "\n".$sql);
 				$result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
 				
-				$sql = "INSERT INTO radgroupreply (groupname, attribute, op, value) VALUES ('Service_Suspended', 'Mikrotik-Address-List', ':=', 'Service_Suspended')";
+				$sql = "INSERT INTO radgroupreply (groupname, attribute, op, value) VALUES ('Service_Suspended', 'Mikrotik-Address-List', ':=', 'Service_Suspended'),('Service_Suspended', 'Fall-Through', '=', 'Yes')";
 				fwrite($fp, "\n".$sql);
 				$result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
 		}
