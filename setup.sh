@@ -93,6 +93,16 @@ read -p "Create a password for the 'radius' user for the mysql 'radius' database
  wget -O /var/www/html/service.edit.php https://raw.githubusercontent.com/jimbouse/ucrm-freeradius-auth/master/php_files/service.edit.php
  wget -O /var/www/html/full_update.php https://raw.githubusercontent.com/jimbouse/ucrm-freeradius-auth/master/php_files/full_update.php
 
+ echo "<?php" > /var/www/html/service.add.php;
+ echo "include('service.edit.php');" >> /var/www/html/service.add.php;
+ echo "?>"  >> /var/www/html/service.add.php;
+ cp /var/www/html/service.add.php /var/www/html/service.archive.php
+ cp /var/www/html/service.add.php /var/www/html/service.delete.php
+ cp /var/www/html/service.add.php /var/www/html/service.end.php
+ cp /var/www/html/service.add.php /var/www/html/service.postpone.php
+ cp /var/www/html/service.add.php /var/www/html/service.suspend.php
+ cp /var/www/html/service.add.php /var/www/html/service.suspend_cancel.php
+
  printf "Creating config.php.\n";
  echo "<?php" > /var/www/html/config.php;
  echo "\$db_host = 'localhost';" >> /var/www/html/config.php;
