@@ -118,50 +118,6 @@ sql {
 #		application_name = ""
 	}
 
-	#
-	#	Configuration for Mongo.
-	#
-	#	Note that the Mongo driver is experimental.  The FreeRADIUS developers
-	#	are unable to help with the syntax of the Mongo queries.  Please see
-	#	the Mongo documentation for that syntax.
-	#
-	#	The Mongo driver supports only the following methods:
-	#
-	#		aggregate
-	#		findAndModify
-	#		findOne
-	#		insert
-	#
-	#	For examples, see the query files:
-	#
-	#		raddb/mods-config/sql/main/mongo/queries.conf
-	#		raddb/mods-config/sql/main/ippool/queries.conf
-	#
-	#	In order to use findAndModify with an aggretation pipleline, make
-	#	sure that you are running MongoDB version 4.2 or greater. FreeRADIUS
-	#	assumes that the paramaters passed to the methods are supported by the
-	#	version of MongoDB which it is connected to.
-	#
-	mongo {
-		#
-		#  The application name to use.
-		#
-		appname = "freeradius"
-
-		#
-		#  The TLS parameters here map directly to the Mongo TLS configuration
-		#
-		tls {
-			certificate_file = /path/to/file
-			certificate_password = "password"
-			ca_file = /path/to/file
-			ca_dir = /path/to/directory
-			crl_file = /path/to/file
-			weak_cert_validation = false
-			allow_invalid_hostname = false
-		}
-	}
-
 	# Connection info:
 	#
 	server = "localhost"
