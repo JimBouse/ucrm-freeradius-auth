@@ -6,7 +6,7 @@ It looks for a custom attribute in UCRM called "devicemac" containing the MAC ad
 
 # Type command bellow in a fresh ubuntu 18.04 server to get started and follow the prompts as they pop up.
 # sudo -i
-# wget https://raw.githubusercontent.com/jimbouse/ucrm-freeradius-auth/master/setup.sh && chmod +x setup.sh && ./setup.sh
+# wget https://raw.githubusercontent.com/jimbouse/ucrm-freeradius-auth/master/setup.sh -O setup.sh && chmod +x setup.sh && ./setup.sh
 
 After setup, log into UCRM and add a webhook pointing at your server.  http://your.radius.server.address/webhook.php
 Webhook event types: service.activate, service.add, service.archive, service.edit, service.end, service.postpone, service.suspend, service.suspend_cancel
