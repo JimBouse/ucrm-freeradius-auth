@@ -85,6 +85,9 @@ read -p "Create a password for the 'radius' user for the mysql 'radius' database
  sed -i "s/-sql/sql/g" /etc/freeradius/3.0/sites-available/inner-tunnel;
 # sed -i "s/sql_user_name = \"%{User-Name}\"/sql_user_name = \"%{Stripped-User-Name}\"/g" /etc/freeradius/3.0/mods-config/sql/main/mysql/queries.conf
 
+ printf "Enabling COA for freeradius\n";
+ ln -s /etc/freeradius/3.0/sites-available/coa /etc/freeradius/3.0/sites-enabled/
+
  service freeradius restart;
 
  printf "Downloading UCRM php files from github.\n";
