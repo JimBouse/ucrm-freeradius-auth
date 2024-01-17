@@ -51,7 +51,7 @@ read -p "Create a password for the 'radius' user for the mysql 'radius' database
  
 # printf "\nMaking a copy of /etc/freeradius/3.0/mods-config/sql/main/mysql/setup.sql to setup.bak\n";
 # cp /etc/freeradius/3.0/mods-config/sql/main/mysql/setup.sql /etc/freeradius/3.0/mods-config/sql/main/mysql/setup.bak
-# printf "Copyied...\n";
+# printf "Copied...\n";
 # sed -i "s/radpass/$sqlpass/g" /etc/freeradius/3.0/mods-config/sql/main/mysql/setup.sql;
 
  printf "Creating user radius with password $sqlpass\n";
@@ -63,15 +63,15 @@ read -p "Create a password for the 'radius' user for the mysql 'radius' database
 # Configuring Freeradius to use MySQL
  printf "Making a copy of /etc/freeradius/3.0/sites-available/default to default.bak\n";
  cp /etc/freeradius/3.0/sites-available/default /etc/freeradius/3.0/sites-available/default.bak
- printf "Copyied...\n";
+ printf "Copied...\n";
 
  printf "Making a copy of /etc/freeradius/3.0/sites-available/inner-tunnel to inner-tunnel.bak\n";
  cp /etc/freeradius/3.0/sites-available/inner-tunnel /etc/freeradius/3.0/sites-available/inner-tunnel.bak
- printf "Copyied...\n";
+ printf "Copied...\n";
 
  printf "Making a copy of /etc/freeradius/3.0/mods-available/sql to sql.bak\n";
  cp /etc/freeradius/3.0/mods-available/sql /etc/freeradius/3.0/mods-available/sql.bak
- printf "Copyied...\n";
+ printf "Copied...\n";
 
  #sed -i "s/#[ \t]+read_clients.=.yes/read_clients = yes/g" /etc/freeradius/3.0/mods-available/sql
  printf "Downloading mods-available/sql from github.\n";
