@@ -23,11 +23,12 @@ if ($json['extraData']['entity']['servicePlanType'] == 'Internet') {
         //fwrite($fp, "\n".$_SERVER['REMOTE_ADDR'].":\n".print_r($json, TRUE));
         if (isset($mac)) {
 		// found a mac address.  Now to check on things.
-		$sql = "DELETE FROM radcheck WHERE username = '".$mac."'";
-		fwrite($fp, "\n".$sql);
-		$result=mysqli_query($link,$sql) or die(mysqli_error($link)." Q=".$sql);
+		//$sql = "DELETE FROM radcheck WHERE username = '".$mac."'";
+		//fwrite($fp, "\n".$sql);
+		//$result=mysqli_query($link,$sql) or die(mysqli_error($link)." Q=".$sql);
 
-		$sql = "REPLACE INTO radcheck(username, attribute, op, value) VALUES ('".$mac."', 'Auth-type', ':=', 'Accept')";
+		//$sql = "REPLACE INTO radcheck(username, attribute, op, value) VALUES ('".$mac."', 'Auth-type', ':=', 'Accept')";
+		$sql = "INSERT INTO radcheck (username, attribute, op, value) (SELECT '".$mac."', 'Auth-type', ':=', 'Accept' WHERE NOT EXISTS(SELECT username FROM radcheck WHERE username = '".$mac."'));
 		fwrite($fp, "\n".$sql);
 		$result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
 
