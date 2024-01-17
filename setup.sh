@@ -87,4 +87,18 @@ read -p "Create a password for the 'radius' user for the mysql 'radius' database
 
  service freeradius restart;
 
+ printf "Downloading UCRM php files from github.\n";
+ wget -O /var/www/html/webhook.php https://raw.githubusercontent.com/jimbouse/ucrm-freeradius-auth/master/php_files/webhook.php
+ wget -O /var/www/html/functions.php https://raw.githubusercontent.com/jimbouse/ucrm-freeradius-auth/master/php_files/functions.php
+ wget -O /var/www/html/service.edit.php https://raw.githubusercontent.com/jimbouse/ucrm-freeradius-auth/master/php_files/service.edit.php
+ wget -O /var/www/html/full_update.php https://raw.githubusercontent.com/jimbouse/ucrm-freeradius-auth/master/php_files/full_update.php
+
+ printf "Creating config.php.\n";
+
+ sudo chown -R www-data:www-data /var/www/html/
+
+ touch /var/log/webhook_request.log
+
+ sudo chown www-data:www-data /var/log/webhook_request.log
+
 fi
