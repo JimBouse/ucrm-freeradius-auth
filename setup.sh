@@ -94,14 +94,14 @@ read -p "Create a password for the 'radius' user for the mysql 'radius' database
  wget -O /var/www/html/full_update.php https://raw.githubusercontent.com/jimbouse/ucrm-freeradius-auth/master/php_files/full_update.php
 
  printf "Creating config.php.\n";
- echo "<?php" > /var/www/html/config.php";
- echo "$db_host = 'localhost';" >> /var/www/html/config.php";
- echo "$db_user = 'radius';" >> /var/www/html/config.php";
- echo "$db_pass = '$sqlpass';" >> /var/www/html/config.php";
- echo "$db = 'radius';" >> /var/www/html/config.php";
- echo "$uispUrl = '$ucrmhost';" >> /var/www/html/config.php";
- echo "$uispKey = '$ucrmkey';" >> /var/www/html/config.php";
- echo "?>"  >> /var/www/html/config.php";
+ echo "<?php" > /var/www/html/config.php;
+ echo "\$db_host = 'localhost';" >> /var/www/html/config.php;
+ echo "\$db_user = 'radius';" >> /var/www/html/config.php;
+ echo "\$db_pass = '$sqlpass';" >> /var/www/html/config.php;
+ echo "\$db = 'radius';" >> /var/www/html/config.php;
+ echo "\$uispUrl = '$ucrmhost';" >> /var/www/html/config.php;
+ echo "\$uispKey = '$ucrmkey';" >> /var/www/html/config.php;
+ echo "?>"  >> /var/www/html/config.php;
 
 
  sudo chown -R www-data:www-data /var/www/html/
