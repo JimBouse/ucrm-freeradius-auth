@@ -21,11 +21,11 @@ read -p "What is the API Key for UCRM? " ucrmkey;
 read -p "Create a password for the 'radius' user for the mysql 'radius' database: " sqlpass;
 # Installing packages 
 
- read -p "Install mariadb-server freeradius freeradius-mysql? y/n " -n 1 -r
+ read -p "Install mariadb-server freeradius freeradius-mysql apache2 php libapache2-mod-php php-mysql php-curl? y/n " -n 1 -r
  echo    # (optional) move to a new line
  if [[ $REPLY =~ ^[Yy]$ ]]
  then
-  apt install mariadb-server freeradius freeradius-mysql -y
+  apt install mariadb-server freeradius freeradius-mysql apache2 php libapache2-mod-php php-mysql php-curl -y
  fi
 
 # Create database
