@@ -72,6 +72,10 @@ read -p "Create a password for the 'radius' user for the mysql 'radius' database
  printf "Making a copy of /etc/freeradius/3.0/mods-available/sql to sql.bak\n";
  cp /etc/freeradius/3.0/mods-available/sql /etc/freeradius/3.0/mods-available/sql.bak
  printf "Copied...\n";
+ 
+ printf "Making a copy of /etc/freeradius/3.0/policy.d/filter to filter.bak\n";
+ cp /etc/freeradius/3.0/policy.d/filter /etc/freeradius/3.0/policy.d/filter.bak
+ printf "Copied...\n";
 
  #sed -i "s/#[ \t]+read_clients.=.yes/read_clients = yes/g" /etc/freeradius/3.0/mods-available/sql
  printf "Downloading mods-available/sql from github.\n";
@@ -84,6 +88,23 @@ read -p "Create a password for the 'radius' user for the mysql 'radius' database
  sed -i "s/-sql/sql/g" /etc/freeradius/3.0/sites-available/default;
  sed -i "s/-sql/sql/g" /etc/freeradius/3.0/sites-available/inner-tunnel;
 # sed -i "s/sql_user_name = \"%{User-Name}\"/sql_user_name = \"%{Stripped-User-Name}\"/g" /etc/freeradius/3.0/mods-config/sql/main/mysql/queries.conf
+
+ printf "Configuring Freeradius to look for ADSL-Agent-Remote-Id (Option 82). For devices in bridge mode.)\n";
+ echo "" >> /etc/freeradius/3.0/policy.d/filter
+ echo "#" >> /etc/freeradius/3.0/policy.d/filter
+ echo "# Adding logic to handle Option 82 bridge mode" >> /etc/freeradius/3.0/policy.d/filter
+ echo "#" >> /etc/freeradius/3.0/policy.d/filter
+ echo "" >> /etc/freeradius/3.0/policy.d/filter
+ echo "check_option_82 {" >> /etc/freeradius/3.0/policy.d/filter
+ echo " if (&ADSL-Agent-Remote-Id) {" >> /etc/freeradius/3.0/policy.d/filter
+ echo "  if(string:ADSL-Agent-Remote-Id =~ /([a-f0-9]{2})[-:]?([a-f0-9]{2})[-:]?([a-f0-9]{2})[-:]?([a-f0-9]{2})[-:]?([a-f0-9]{2})[-:]?([a-f0-9]{2})/i) {" >> /etc/freeradius/3.0/policy.d/filter
+ echo "   update request {" >> /etc/freeradius/3.0/policy.d/filter
+ echo "    User-Name := "%{toupper:%{1}:%{2}:%{3}:%{4}:%{5}:%{6}}"" >> /etc/freeradius/3.0/policy.d/filter
+ echo "   }" >> /etc/freeradius/3.0/policy.d/filter
+ echo "  }" >> /etc/freeradius/3.0/policy.d/filter
+ echo " }" >> /etc/freeradius/3.0/policy.d/filter
+ echo "}" >> /etc/freeradius/3.0/policy.d/filter
+ 
 
  printf "Enabling COA for freeradius\n";
  ln -s /etc/freeradius/3.0/sites-available/coa /etc/freeradius/3.0/sites-enabled/
