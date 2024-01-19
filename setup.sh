@@ -106,7 +106,7 @@ read -p "Create a password for the 'radius' user for the mysql 'radius' database
  echo "}" >> /etc/freeradius/3.0/policy.d/filter
 
  printf "Enabling filter 'check_option_82' in /etc/freeradius/3.0/sites-available/default\n";
- sed -i "s/filter_username/filter_username\n        check_option_82/g" /etc/freeradius/3.0/sites-available/default;
+ sed -i "s/^\s*filter_username/        filter_username\n        check_option_82/g" /etc/freeradius/3.0/sites-available/default;
  
  printf "Enabling COA for freeradius\n";
  ln -s /etc/freeradius/3.0/sites-available/coa /etc/freeradius/3.0/sites-enabled/
