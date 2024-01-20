@@ -129,4 +129,13 @@ read -p "Create a password for the 'radius' user for the mysql 'radius' database
  touch /var/log/webhook_request.log
  sudo chown www-data:www-data /var/log/webhook_request.log
 
+ echo    # (optional) move to a new line
+ echo    # (optional) move to a new line
+ read -p "Initiate full sync (php /var/www/html/full_update.php)? y/n " -n 1 -r
+ echo    # (optional) move to a new line
+ if [[ $REPLY =~ ^[Yy]$ ]]
+ then
+  php /var/www/html/full_update.php
+ fi
+
 fi
