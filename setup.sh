@@ -28,34 +28,16 @@ read -p "Create a password for the 'radius' user for the mysql 'radius' database
   apt install mariadb-server freeradius freeradius-mysql apache2 php libapache2-mod-php php-mysql php-curl -y
  fi
 
-# Create database
+ printf "Create radius database\n"
+ mysql -e "CREATE DATABASE radius;";
 
- read -p "Create radius database? y/n " -n 1 -r
- echo    # (optional) move to a new line
- if [[ $REPLY =~ ^[Yy]$ ]]
- then
-  mysql -e "CREATE DATABASE radius;";
- fi
-
-# Importing Schema
-
- read -p "Import Schema.sql? y/n " -n 1 -r
- echo    # (optional) move to a new line
- if [[ $REPLY =~ ^[Yy]$ ]]
- then
-  mysql radius < /etc/freeradius/3.0/mods-config/sql/main/mysql/schema.sql
- fi
-
-# Creating radius user
-
- 
-# printf "\nMaking a copy of /etc/freeradius/3.0/mods-config/sql/main/mysql/setup.sql to setup.bak\n";
-# cp /etc/freeradius/3.0/mods-config/sql/main/mysql/setup.sql /etc/freeradius/3.0/mods-config/sql/main/mysql/setup.bak
-# printf "Copied...\n";
-# sed -i "s/radpass/$sqlpass/g" /etc/freeradius/3.0/mods-config/sql/main/mysql/setup.sql;
+ printf "Importing Schema\n"
+ mysql radius < /etc/freeradius/3.0/mods-config/sql/main/mysql/schema.sql
 
  printf "Creating user radius with password $sqlpass\n";
+# Documentation says to import this file but we want more permissions than the .sql provides.  
 # mysql radius < /etc/freeradius/3.0/mods-config/sql/main/mysql/setup.sql;
+# Manually adding user in the following steps
  mysql -e "CREATE USER 'radius'@'localhost' IDENTIFIED BY '$sqlpass';";
  mysql -e "grant all privileges on radius.* to 'radius'@'localhost';";
  mysql -e "SHOW GRANTS FOR 'radius'@'localhost';";
@@ -139,11 +121,12 @@ read -p "Create a password for the 'radius' user for the mysql 'radius' database
  echo "\$uispKey = '$ucrmkey';" >> /var/www/html/config.php;
  echo "?>"  >> /var/www/html/config.php;
 
-
- sudo chown -R www-data:www-data /var/www/html/
-
+ printf "Setting file ownerships\n"
+ chown -R www-data:www-data /var/www/html/
+ chown -R freerad:freerad /etc/freeradius/
+ 
+ printf "Creaing log file for UCRM scripts at /var/log/webhook_request.log\n"
  touch /var/log/webhook_request.log
-
  sudo chown www-data:www-data /var/log/webhook_request.log
 
 fi
