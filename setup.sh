@@ -136,7 +136,7 @@ read -p "Create a password for the 'radius' user for the mysql 'radius' database
  if [[ $REPLY =~ ^[Yy]$ ]]
  then
   crontab -l > crontab_new
-  echo "0 5 * * * php /var/www/html/full_update.php" >> crontab_new
+  echo "0 5 * * * root php /var/www/html/full_update.php" >> crontab_new
   crontab crontab_new
   rm crontab_new
  fi
