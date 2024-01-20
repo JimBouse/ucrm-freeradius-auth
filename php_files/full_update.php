@@ -3,7 +3,7 @@ set_time_limit(600);
 require_once("config.php");
 require_once("functions.php");
 
-echo "Fetching ALL services\n";
+echo "Fetching ALL services. This may take up to a minute to begin processing.\n";
 $ucrmServices=ucrmGET("/clients/services");
 $services = count($ucrmServices);
 $i = 0;
