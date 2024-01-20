@@ -131,6 +131,17 @@ read -p "Create a password for the 'radius' user for the mysql 'radius' database
 
  echo    # (optional) move to a new line
  echo    # (optional) move to a new line
+ read -p "Schedule full sync (php /var/www/html/full_update.php) for 5 AM each day? y/n " -n 1 -r
+ echo    # (optional) move to a new line
+ if [[ $REPLY =~ ^[Yy]$ ]]
+ then
+  crontab -l > crontab_new
+  echo "0 5 * * * php /var/www/html/full_update.php" >> crontab_new
+  crontab crontab_new
+  rm crontab_new
+ fi
+ 
+ echo    # (optional) move to a new line
  read -p "Initiate full sync (php /var/www/html/full_update.php)? y/n " -n 1 -r
  echo    # (optional) move to a new line
  if [[ $REPLY =~ ^[Yy]$ ]]
