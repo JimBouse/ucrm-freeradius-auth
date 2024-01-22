@@ -62,7 +62,7 @@ read -p "Create a password for the 'radius' user for the mysql 'radius' database
  #sed -i "s/#[ \t]+read_clients.=.yes/read_clients = yes/g" /etc/freeradius/3.0/mods-available/sql
  printf "Downloading mods-available/sql from github.\n";
  wget https://raw.githubusercontent.com/JimBouse/ucrm-freeradius-auth/master/sql3.0 -O /etc/freeradius/3.0/mods-available/sql;
- sed -i "/password.=.*/c\password = $sqlpass" /etc/freeradius/3.0/mods-available/sql;
+ sed -i "/password.=.*/c\        password = $sqlpass" /etc/freeradius/3.0/mods-available/sql;
 
  printf "Configuring Freeradius to use MySQL\n";
  ln -s /etc/freeradius/3.0/mods-available/sql /etc/freeradius/3.0/mods-enabled/sql
