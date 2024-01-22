@@ -1,6 +1,6 @@
 # ucrm-freeradius
 
-This is designed and tested on Ubuntu 18.04.  It will create a DALORADIUS server that is setup to accept requests from mikrotik DHCP servers providing AUTH or denial based on MAC addresses being "active" in UCRM.
+This is designed and tested on Ubuntu 24.04.  It will accept requests from mikrotik DHCP servers providing AUTH or denial based on MAC addresses being "active" in UCRM.
 
 It looks for a custom attribute in UCRM called "devicemac" containing the MAC address of the client.  If you use a different custom attibute name, you can modify that in the service.edit.php file.
 Make sure you have run sudo apt update && sudo apt upgrade;
