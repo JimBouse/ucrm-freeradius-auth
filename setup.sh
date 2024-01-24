@@ -58,6 +58,10 @@ read -p "Create a password for the 'radius' user for the mysql 'radius' database
  printf "Making a copy of /etc/freeradius/3.0/policy.d/filter to filter.bak\n";
  cp /etc/freeradius/3.0/policy.d/filter /etc/freeradius/3.0/policy.d/filter.bak
  printf "Copied...\n";
+  
+ printf "Making a copy of /etc/freeradius/3.0/policy.d/accounting to accounting.bak\n";
+ cp /etc/freeradius/3.0/policy.d/accounting /etc/freeradius/3.0/policy.d/accounting.bak
+ printf "Copied...\n";
 
  #sed -i "s/#[ \t]+read_clients.=.yes/read_clients = yes/g" /etc/freeradius/3.0/mods-available/sql
  printf "Downloading mods-available/sql from github.\n";
