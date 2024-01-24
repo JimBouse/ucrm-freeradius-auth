@@ -82,7 +82,7 @@ read -p "Create a password for the 'radius' user for the mysql 'radius' database
  echo " if (&ADSL-Agent-Remote-Id) {" >> /etc/freeradius/3.0/policy.d/filter
  echo "  if(\"%{string:ADSL-Agent-Remote-Id}\" =~ /([a-f0-9]{2})[-:]?([a-f0-9]{2})[-:]?([a-f0-9]{2})[-:]?([a-f0-9]{2})[-:]?([a-f0-9]{2})[-:]?([a-f0-9]{2})/i) {" >> /etc/freeradius/3.0/policy.d/filter
  echo "   update request {" >> /etc/freeradius/3.0/policy.d/filter
- echo "    User-Name := "%{toupper:%{1}:%{2}:%{3}:%{4}:%{5}:%{6}}"" >> /etc/freeradius/3.0/policy.d/filter
+ echo "    User-Name := \"%{toupper:%{1}:%{2}:%{3}:%{4}:%{5}:%{6}}\"" >> /etc/freeradius/3.0/policy.d/filter
  echo "   }" >> /etc/freeradius/3.0/policy.d/filter
  echo "  }" >> /etc/freeradius/3.0/policy.d/filter
  echo " }" >> /etc/freeradius/3.0/policy.d/filter
@@ -98,7 +98,7 @@ read -p "Create a password for the 'radius' user for the mysql 'radius' database
  echo " if (&ADSL-Agent-Remote-Id) {" >> /etc/freeradius/3.0/policy.d/accounting
  echo "  if(\"%{string:ADSL-Agent-Remote-Id}\" =~ /([a-f0-9]{2})[-:]?([a-f0-9]{2})[-:]?([a-f0-9]{2})[-:]?([a-f0-9]{2})[-:]?([a-f0-9]{2})[-:]?([a-f0-9]{2})/i) {" >> /etc/freeradius/3.0/policy.d/accounting
  echo "   update request {" >> /etc/freeradius/3.0/policy.d/accounting
- echo "    User-Name := "%{toupper:%{1}:%{2}:%{3}:%{4}:%{5}:%{6}}"" >> /etc/freeradius/3.0/policy.d/accounting
+ echo "    User-Name := \"%{toupper:%{1}:%{2}:%{3}:%{4}:%{5}:%{6}}\"" >> /etc/freeradius/3.0/policy.d/accounting
  echo "   }" >> /etc/freeradius/3.0/policy.d/accounting
  echo "  }" >> /etc/freeradius/3.0/policy.d/accounting
  echo " }" >> /etc/freeradius/3.0/policy.d/accounting
