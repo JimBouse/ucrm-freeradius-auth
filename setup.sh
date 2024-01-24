@@ -170,7 +170,7 @@ read -p "Create a password for the 'radius' user for the mysql 'radius' database
  echo    # (optional) move to a new line
  if [[ $REPLY =~ ^[Yy]$ ]]
  then
-  php f- /var/www/html/full_update.php
+  php -f /var/www/html/full_update.php
  fi
 
 fi
