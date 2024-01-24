@@ -15,7 +15,7 @@ Webhook event types: service.activate, service.add, service.archive, service.edi
 # You will need to add your mikrotik routers to the NAS table:
 INSERT INTO nas (nasname, shortname, secret, description) VALUES ('1.2.3.4', 'Tower Router', 'somesecret', 'Tower router installed at 123 street');
 
-# Run "php /var/www/html/full_update.php" to initiate the full sync.
+# Run "php -f /var/www/html/full_update.php" to initiate the full sync.
 After that, it should stay syncronized wtih any save of a service profile.
 
 You may want to set a cronjob to run full_update.php nightly just to make sure.
