@@ -72,6 +72,7 @@ read -p "Create a password for the 'radius' user for the mysql 'radius' database
 # sed -i "s/sql_user_name = \"%{User-Name}\"/sql_user_name = \"%{Stripped-User-Name}\"/g" /etc/freeradius/3.0/mods-config/sql/main/mysql/queries.conf
 
  printf "Configuring Freeradius to look for ADSL-Agent-Remote-Id (Option 82). For devices in bridge mode.)\n";
+ printf "Adding check_option_82 {} to /etc/freeradius/3.0/policy.d/filter\n";
  echo "" >> /etc/freeradius/3.0/policy.d/filter
  echo "#" >> /etc/freeradius/3.0/policy.d/filter
  echo "# Adding logic to handle Option 82 bridge mode" >> /etc/freeradius/3.0/policy.d/filter
@@ -87,8 +88,27 @@ read -p "Create a password for the 'radius' user for the mysql 'radius' database
  echo " }" >> /etc/freeradius/3.0/policy.d/filter
  echo "}" >> /etc/freeradius/3.0/policy.d/filter
 
+ printf "Adding check_option_82 {} to /etc/freeradius/3.0/policy.d/accounting\n";
+ echo "" >> /etc/freeradius/3.0/policy.d/accounting
+ echo "#" >> /etc/freeradius/3.0/policy.d/accounting
+ echo "# Adding logic to handle Option 82 bridge mode" >> /etc/freeradius/3.0/policy.d/accounting
+ echo "#" >> /etc/freeradius/3.0/policy.d/accounting
+ echo "" >> /etc/freeradius/3.0/policy.d/accounting
+ echo "check_option_82 {" >> /etc/freeradius/3.0/policy.d/accounting
+ echo " if (&ADSL-Agent-Remote-Id) {" >> /etc/freeradius/3.0/policy.d/accounting
+ echo "  if(""%{string:ADSL-Agent-Remote-Id}"" =~ /([a-f0-9]{2})[-:]?([a-f0-9]{2})[-:]?([a-f0-9]{2})[-:]?([a-f0-9]{2})[-:]?([a-f0-9]{2})[-:]?([a-f0-9]{2})/i) {" >> /etc/freeradius/3.0/policy.d/accounting
+ echo "   update request {" >> /etc/freeradius/3.0/policy.d/accounting
+ echo "    User-Name := "%{toupper:%{1}:%{2}:%{3}:%{4}:%{5}:%{6}}"" >> /etc/freeradius/3.0/policy.d/accounting
+ echo "   }" >> /etc/freeradius/3.0/policy.d/accounting
+ echo "  }" >> /etc/freeradius/3.0/policy.d/accounting
+ echo " }" >> /etc/freeradius/3.0/policy.d/accounting
+ echo "}" >> /etc/freeradius/3.0/policy.d/accounting
+
  printf "Enabling filter 'check_option_82' in /etc/freeradius/3.0/sites-available/default\n";
+ printf "Adding 'check_option_82' in AUTH section\n";
  sed -i "s/^\s*filter_username/        filter_username\n        #\n        # Added by UCRM-Freeradius-Auth script\n        #\n        check_option_82/g" /etc/freeradius/3.0/sites-available/default;
+ printf "Adding 'check_option_82' in ACCT section\n";
+ sed -i "s/^\s*preprocess/        preprocess\n        #\n        # Added by UCRM-Freeradius-Auth script\n        #\n        check_option_82/g" /etc/freeradius/3.0/sites-available/default;
  
  printf "Enabling COA for freeradius\n";
  ln -s /etc/freeradius/3.0/sites-available/coa /etc/freeradius/3.0/sites-enabled/
