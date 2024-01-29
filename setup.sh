@@ -153,6 +153,17 @@ read -p "Create a password for the 'radius' user for the mysql 'radius' database
  touch /var/log/webhook_request.log
  sudo chown www-data:www-data /var/log/webhook_request.log
 
+ 
+ printf "Creaing log file rotation /var/log/webhook_request.log\n"
+ echo "/var/log/webhook_request.log {" > /etc/logrotate.d/ucrm-freeradius
+ echo "  rotate 4" >> /etc/logrotate.d/ucrm-freeradius
+ echo "  weekly" >> /etc/logrotate.d/ucrm-freeradius
+ echo "  compress" >> /etc/logrotate.d/ucrm-freeradius
+ echo "  missingok" >> /etc/logrotate.d/ucrm-freeradius
+ echo "  notifempty" >> /etc/logrotate.d/ucrm-freeradius
+ echo "}" >> /etc/logrotate.d/ucrm-freeradius
+
+
  echo    # (optional) move to a new line
  echo    # (optional) move to a new line
  read -p "Schedule full sync (php /var/www/html/full_update.php) for 5 AM each day? y/n " -n 1 -r
