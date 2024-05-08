@@ -1,9 +1,9 @@
 <?php
 // get MAC from attributes list.
 foreach ($json['extraData']['entity']['attributes'] as $attrib) {
-        if ($attrib['key'] == 'devicemac' && preg_match('/^(?:(?:[0-9a-f]{2}[\:]{1}){5}|(?:[0-9a-f]{2}[-]{1}){5}|(?:[0-9a-f]{2}){5})[0-9a-f]{2}$/i', $attrib['value'])) {
+        if (strtolower($attrib['key']) == 'devicemac' && preg_match('/^(?:(?:[0-9a-f]{2}[\:]{1}){5}|(?:[0-9a-f]{2}[-]{1}){5}|(?:[0-9a-f]{2}){5})[0-9a-f]{2}$/i', $attrib['value'])) {
                 $mac = $attrib['value'];
-        } elseif ($attrib['key'] == 'devicemac' && !empty($attrib['value'])) {
+        } elseif (strtolower($attrib['key']) == 'devicemac' && !empty($attrib['value'])) {
                 // not a MAC address.  Likely a static IP or Business Client
                 $deviceMacValue = $attrib['value'];
         } elseif ($attrib['customAttributeId'] == 24 && !empty($attrib['value'])) {
