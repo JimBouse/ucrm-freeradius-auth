@@ -180,8 +180,8 @@ read -p "Create a password for the 'radius' user for the mysql 'radius' database
  echo    # (optional) move to a new line
  if [[ $REPLY =~ ^[Yy]$ ]]
  then
-  wget -O /tmp/asdf.sql https://raw.githubusercontent.com/jimbouse/ucrm-freeradius-auth/master/asdf.sql
-  mysql radius < /tmp/asdf.sql
+  wget -O /tmp/add_sql_trigger.sql https://raw.githubusercontent.com/jimbouse/ucrm-freeradius-auth/master/add_sql_trigger.sql
+  mysql radius < /tmp/add_sql_trigger.sql
  fi
  
  echo    # (optional) move to a new line
