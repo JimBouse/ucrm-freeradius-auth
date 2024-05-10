@@ -62,6 +62,7 @@ if ($json['extraData']['entity']['servicePlanType'] == 'Internet') {
 		$radGroupReply_MikrotikAddressListActiveService = 1;
 		$radGroupReply_MikrotikAddressListEndedService = 1;
 		$radGroupReply_MikrotikAddressListSuspendedService = 1;
+		$radGroupReply_MikrotikAddressListUnknownDeviceService = 1;
 		$sql = "SELECT attribute, value FROM radgroupreply";
 		$result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
 		while ($row = mysqli_fetch_assoc($result)) {
@@ -84,6 +85,9 @@ if ($json['extraData']['entity']['servicePlanType'] == 'Internet') {
 						
 						if ($row['value'] == "Service_Suspended") {
 							   $radGroupReply_MikrotikAddressListSuspendedService = 0;
+						}
+						if ($row['value'] == "Service_Unknown_Device") {
+							   $radGroupReply_MikrotikAddressListUnknownDeviceService = 0;
 						}
 				}
 		}
@@ -133,6 +137,17 @@ if ($json['extraData']['entity']['servicePlanType'] == 'Internet') {
 				$result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
 				
 				$sql = "INSERT INTO radgroupreply (groupname, attribute, op, value) VALUES ('Service_Suspended', 'Mikrotik-Address-List', ':=', 'Service_Suspended'),('Service_Suspended', 'Session-Timeout', ':=', '60'),('Service_Suspended', 'Fall-Through', '=', 'Yes')";
+				fwrite($fp, "\n".$sql);
+				$result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
+		}
+
+				
+		if ($radGroupReply_MikrotikAddressListUnknownDeviceService == 1) {
+				$sql = "DELETE FROM radgroupreply WHERE groupname ='Service_Unknown_Device' AND attribute = 'Mikrotik-Address-List'";
+				fwrite($fp, "\n".$sql);
+				$result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
+				
+				$sql = "INSERT INTO radgroupreply (groupname, attribute, op, value) VALUES ('Service_Unknown_Device', 'Mikrotik-Address-List', ':=', 'Service_Unknown_Device'),('Service_Unknown_Device', 'Session-Timeout', ':=', '60'),('Service_Unknown_Device', 'Fall-Through', '=', 'Yes')";
 				fwrite($fp, "\n".$sql);
 				$result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
 		}
