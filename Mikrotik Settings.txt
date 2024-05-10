@@ -1,0 +1,26 @@
+Mikrotik Scripts
+
+1. Add this to your Mikrotik DHCP server on the "Scripts" tab.
+
+/ip dhcp-server lease
+:if (($leaseBound=1) && ([find where dynamic mac-address=$leaseActMAC]!="")) do={
+  :log info message="IP=$leaseActIP"
+  :if ([:len [/ip firewall/address-list/find where address=$leaseActIP && list=Service_Unknown_Device]] > 0) do={ 
+      :do {
+        /ip firewall/address-list/add list=Service_Unknown_Block_Bypass timeout=7d address=$leaseActIP; 
+      } on-error= { 
+        :log info "$leaseActIP already in Service_Unknown_Block_Bypass list"; 
+      };
+      :do {
+        /ip firewall/address-list/add list=Service_Unknown_Block address=$leaseActIP; 
+      } on-error= { 
+        :log info "$leaseActIP already in Service_Unknown_Block list"; 
+      };
+  } else {
+    /ip firewall/address-list/remove [/ip firewall/address-list/find where address=$leaseActIP && list=Service_Unknown_Block];
+  };
+}
+
+
+2. Add the following rules to your firewall:
+
