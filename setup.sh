@@ -175,6 +175,14 @@ read -p "Create a password for the 'radius' user for the mysql 'radius' database
   crontab crontab_new
   rm crontab_new
  fi
+
+ read -p "Automatically add unknown users (MAC Addresses) to RADIUS into 'Service_Uknown_Device' group? y/n " -n 1 -r
+ echo    # (optional) move to a new line
+ if [[ $REPLY =~ ^[Yy]$ ]]
+ then
+  wget -O /tmp/asdf.sql https://raw.githubusercontent.com/jimbouse/ucrm-freeradius-auth/master/asdf.sql
+  mysql radius < /tmp/asdf.sql
+ fi
  
  echo    # (optional) move to a new line
  read -p "Initiate full sync (php /var/www/html/full_update.php)? y/n " -n 1 -r
