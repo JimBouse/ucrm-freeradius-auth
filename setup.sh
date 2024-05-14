@@ -161,7 +161,7 @@ fi
  echo "\$uispUrl = '$ucrmhost';" >> /var/www/html/config.php;
  echo "\$uispKey = '$ucrmkey';" >> /var/www/html/config.php;
  echo "\$smtpHost = '$smtphost';" >> /var/www/html/config.php;
- echo "\$smtpPort = '$smtpport';" >> /var/www/html/config.php;
+ echo "\$smtpPort = $smtpport;" >> /var/www/html/config.php;
  echo "\$smtpFrom = '$smtpfrom';" >> /var/www/html/config.php;
  echo "\$smtpTo = '$smtpto';" >> /var/www/html/config.php;
  echo "\$smtpUser = '$smtpuser';" >> /var/www/html/config.php;
