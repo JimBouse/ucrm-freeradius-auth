@@ -1,14 +1,14 @@
 <?php
+$customAttribKeyForMAC = 0;
 // get MAC from attributes list.
 foreach ($json['extraData']['entity']['attributes'] as $attrib) {
         if (strtolower($attrib['key']) == 'devicemac' && preg_match('/^(?:(?:[0-9a-f]{2}[\:]{1}){5}|(?:[0-9a-f]{2}[-]{1}){5}|(?:[0-9a-f]{2}){5})[0-9a-f]{2}$/i', $attrib['value'])) {
                 $mac = $attrib['value'];
+				$customAttribKeyForMAC = $attrib['customAttributeId'];
         } elseif (strtolower($attrib['key']) == 'devicemac' && !empty($attrib['value'])) {
                 // not a MAC address.  Likely a static IP or Business Client
                 $deviceMacValue = $attrib['value'];
-        } elseif ($attrib['customAttributeId'] == 24 && !empty($attrib['value'])) {
-                $rxsignal = $attrib['value'];
-        }
+        } 
 }
 if (array_key_exists('entityBeforeEdit', $json['extraData'])) {
 	foreach ($json['extraData']['entityBeforeEdit']['attributes'] as $attrib) {
@@ -17,17 +17,12 @@ if (array_key_exists('entityBeforeEdit', $json['extraData'])) {
 	        }
 	}
 }
-//$clientResult = ucrmGET('/clients/'.intval($json['extraData']['entity']['clientId']));
-//fwrite($fp, "\n".print_r($clientResult, TRUE));
+
 if ($json['extraData']['entity']['servicePlanType'] == 'Internet') {
-        //fwrite($fp, "\n".$_SERVER['REMOTE_ADDR'].":\n".print_r($json, TRUE));
+
         if (isset($mac)) {
 		// found a mac address.  Now to check on things.
-		//$sql = "DELETE FROM radcheck WHERE username = '".$mac."'";
-		//fwrite($fp, "\n".$sql);
-		//$result=mysqli_query($link,$sql) or die(mysqli_error($link)." Q=".$sql);
 
-		//$sql = "REPLACE INTO radcheck(username, attribute, op, value) VALUES ('".$mac."', 'Auth-type', ':=', 'Accept')";
 		$sql = "INSERT INTO radcheck (username, attribute, op, value) (SELECT '".$mac."', 'Auth-type', ':=', 'Accept' WHERE NOT EXISTS(SELECT username FROM radcheck WHERE username = '".$mac."'))";
 		fwrite($fp, "\n".$sql);
 		$result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
@@ -40,22 +35,6 @@ if ($json['extraData']['entity']['servicePlanType'] == 'Internet') {
 		$sql = "INSERT INTO radusergroup(username, groupname, priority) VALUES ('".$mac."', '".$json['extraData']['entity']['servicePlanName']."', 1)";
 		fwrite($fp, "\n".$sql);
 		$result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
-
-		//$sql = "DELETE FROM userbillinfo WHERE username = '".$mac."'";
-		//fwrite($fp, "\n".$sql);
-		//$result=mysqli_query($link,$sql) or die(mysqli_error($link)." Q=".$sql);
-		
-		//$sql = "INSERT INTO userbillinfo (username, planName) VALUES ('".$mac."', '".$json['extraData']['entity']['servicePlanName']."')";
-		//fwrite($fp, "\n".$sql);
-		//$result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
-		
-		//$sql = "DELETE FROM userinfo WHERE username = '".$mac."'";
-		//fwrite($fp, "\n".$sql);
-		//$result=mysqli_query($link,$sql) or die(mysqli_error($link)." Q=".$sql);
-		
-		//$sql = "INSERT INTO userinfo (username, firstname, lastname) VALUES ('".$mac."', '".$json['extraData']['entity']['clientId']."', '".$json['extraData']['entity']['id']."')";
-		//fwrite($fp, "\n".$sql);
-		//$result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
 
 		$radGroupReply_MikrotikRateLimit = 1;
 		$radGroupReply_MikrotikAddressListPreparedService = 1;
@@ -96,7 +75,7 @@ if ($json['extraData']['entity']['servicePlanType'] == 'Internet') {
 				fwrite($fp, "\n".$sql);
 				$result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
 				
-				$sql = "INSERT INTO radgroupreply (groupname, attribute, op, value) VALUES ('".$json['extraData']['entity']['servicePlanName']."', 'Mikrotik-Rate-Limit', ':=', '".$json['extraData']['entity']['uploadSpeed']."M/".$json['extraData']['entity']['downloadSpeed']."M'),('".$json['extraData']['entity']['servicePlanName']."', 'Fall-Through', '=', 'Yes')";
+				$sql = "INSERT INTO radgroupreply (groupname, attribute, op, value) VALUES ('".$json['extraData']['entity']['servicePlanName']."', 'Mikrotik-Rate-Limit', '=', '".$json['extraData']['entity']['uploadSpeed']."M/".$json['extraData']['entity']['downloadSpeed']."M'),('".$json['extraData']['entity']['servicePlanName']."', 'Fall-Through', '=', 'Yes')";
 				fwrite($fp, "\n".$sql);
 				$result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
 		}
@@ -116,7 +95,7 @@ if ($json['extraData']['entity']['servicePlanType'] == 'Internet') {
 				fwrite($fp, "\n".$sql);
 				$result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
 				
-				$sql = "INSERT INTO radgroupreply (groupname, attribute, op, value) VALUES ('Service_Active', 'Mikrotik-Address-List', ':=', 'Service_Active'),('Service_Active', 'Fall-Through', '=', 'Yes')";
+				$sql = "INSERT INTO radgroupreply (groupname, attribute, op, value) VALUES ('Service_Active', 'Mikrotik-Address-List', '+=', 'Service_Active'),('Service_Active', 'Fall-Through', '=', 'Yes')";
 				fwrite($fp, "\n".$sql);
 				$result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
 		}
@@ -156,11 +135,30 @@ if ($json['extraData']['entity']['servicePlanType'] == 'Internet') {
 		if (intval($json['extraData']['entity']['trafficShapingOverrideEnabled']) == 1) {
 				$download = $json['extraData']['entity']['downloadSpeedOverride'];
 				$upload = $json['extraData']['entity']['uploadSpeedOverride'];
-				$overrideEnabled = 1;
+				fwrite($fp, "\nApplying speed override ".$download."/".$upload." to ".$mac);
+				
+				$sql = "INSERT INTO radreply (username, attribute, op, value) (SELECT '".$mac."', 'Mikrotik-Rate-Limit', '=', '".$upload."M/".$download."M' WHERE NOT EXISTS(SELECT username FROM radreply WHERE username = '".$mac."' AND attribute = 'Mikrotik-Rate-Limit'))";
+				fwrite($fp, "\n".$sql);
+				$result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
+				
+				$sql = "UPDATE radreply SET value = '".$upload."M/".$download."M' WHERE username = '".$mac."' AND attribute = 'Mikrotik-Rate-Limit' AND value <> '".$upload."M/".$download."M'";
+				fwrite($fp, "\n".$sql);
+				$result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
+				
+				$sql = "INSERT INTO radreply (username, attribute, op, value) (SELECT '".$mac."', 'Fall-Through', '=', 'Yes' WHERE NOT EXISTS(SELECT username FROM radreply WHERE username = '".$mac."' AND attribute = 'Fall-Through'))";
+				fwrite($fp, "\n".$sql);
+				$result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
+				
 		} else {
-				$download = $json['extraData']['entity']['downloadSpeed'];
-				$upload = $json['extraData']['entity']['uploadSpeed'];
-				$overrideEnabled = 0;
+				fwrite($fp, "\nCleariing speed override".$sql);
+				$sql = "DELETE FROM radreply WHERE username = '".$mac."' AND attribute = 'Mikrotik-Rate-Limit'";
+				fwrite($fp, "\n".$sql);
+				$result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
+				
+				$sql = "DELETE FROM radreply WHERE username = '".$mac."' AND attribute = 'Fall-Through'";
+				fwrite($fp, "\n".$sql);
+				$result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
+				
 		}
 
 		switch (intval($json['extraData']['entity']['status'])) {
@@ -171,19 +169,19 @@ if ($json['extraData']['entity']['servicePlanType'] == 'Internet') {
                                         $result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
 
 
-						// break;
+						break;
 				case 1: // Active
 						fwrite($fp, "\nActive Service");
 						
 						// see if an existing profile (not this one) has the same MAC address.  Remove the mac address from the old profile if so.
-						$nonActiveServices = ucrmGET("/clients/services?customAttributeId=2&customAttributeValue=".$mac);
+						$nonActiveServices = ucrmGET("/clients/services?customAttributeId=".$customAttribKeyForMAC."&customAttributeValue=".$mac);
 						foreach ($nonActiveServices as $oldService) {
 							if (intval($oldService['status']) !== 0 && intval($oldService['status']) !== 1) {
 								fwrite($fp, "\nAlready ENDED service for MAC ".$mac." detected.  Removing reference to MAC");
 								foreach ($oldService['attributes'] as $attrib) {
-									if ($attrib['key'] == "devicemac" && strtolower($attrib['value']) == strtolower($mac)) {
+									if (strtolower($attrib['key']) == "devicemac" && strtolower($attrib['value']) == strtolower($mac)) {
 										$uArr = [];
-										$uArr['attributes'][] = array('value' => "", 'customAttributeId' => 2);
+										$uArr['attributes'][] = array('value' => "", 'customAttributeId' => $customAttribKeyForMAC);
 										$uDelete = ucrmPATCH("clients/services/".$oldService['id'], json_encode($uArr));
 										fwrite($fp, "\nRemoved MAC ".$mac." from service ID: ".$oldService['id']);
 									}
@@ -202,13 +200,15 @@ if ($json['extraData']['entity']['servicePlanType'] == 'Internet') {
 				case 2: // Ended
 						fwrite($fp, "\nEnded");
 						$sql = "INSERT INTO radusergroup(username, groupname, priority) VALUES ('".$mac."', 'Service_Ended', 1)";
-                                                fwrite($fp, "\n".$sql);
-                                                $result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
+						fwrite($fp, "\n".$sql);
+						$result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
+						
+						break;
 				case 3: // Suspended
 						fwrite($fp, "\nSuspended");
-                                                $sql = "INSERT INTO radusergroup(username, groupname, priority) VALUES ('".$mac."', 'Service_Suspended', 1)";
-                                                fwrite($fp, "\n".$sql);
-                                                $result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
+						$sql = "INSERT INTO radusergroup(username, groupname, priority) VALUES ('".$mac."', 'Service_Suspended', 1)";
+						fwrite($fp, "\n".$sql);
+						$result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
 
 						break;
 				case 4: // Prepared blocked
@@ -217,6 +217,7 @@ if ($json['extraData']['entity']['servicePlanType'] == 'Internet') {
 						break;
 				case 5: // Obsolete
 						fwrite($fp, "\nObsolete");
+						
 						break;
 				case 6: // Deferred
 						fwrite($fp, "\nDeferred");
