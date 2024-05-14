@@ -19,6 +19,19 @@ then
 read -p "What is the hostname or IP address of the UCRM Instance? " ucrmhost;
 read -p "What is the API Key for UCRM? " ucrmkey;
 read -p "Create a password for the 'radius' user for the mysql 'radius' database: " sqlpass;
+
+read -p "Enter your SMTP Host. If left blank, no messages will be mailed: " smtphost;
+read -p "Enter your SMTP port: " smtpport;
+read -p "Enter your SMTP from address: " smtpfrom;
+read -p "Enter your SMTP to address: " smtpto;
+read -p "Do you need to authenticate with your SMTP host? y/n " -n 1 -r
+echo;
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+  read -p "Enter your SMTP username: " smtpuser;
+  read -p "Enter your SMTP password: " smtppass;
+fi
+
 # Installing packages 
 
  read -p "Install mariadb-server freeradius freeradius-mysql apache2 php libapache2-mod-php php-mysql php-curl and unzip? y/n " -n 1 -r
@@ -147,6 +160,14 @@ read -p "Create a password for the 'radius' user for the mysql 'radius' database
  echo "\$db = 'radius';" >> /var/www/html/config.php;
  echo "\$uispUrl = '$ucrmhost';" >> /var/www/html/config.php;
  echo "\$uispKey = '$ucrmkey';" >> /var/www/html/config.php;
+ echo "\$smtpHost = '$smtphost';" >> /var/www/html/config.php;
+ echo "\$smtpPort = '$smtpport';" >> /var/www/html/config.php;
+ echo "\$smtpFrom = '$smtpfrom';" >> /var/www/html/config.php;
+ echo "\$smtpTo = '$smtpto';" >> /var/www/html/config.php;
+ echo "\$smtpUser = '$smtpuser';" >> /var/www/html/config.php;
+ echo "\$smtpPass = '$smtpPass';" >> /var/www/html/config.php;
+
+ 
  echo "?>"  >> /var/www/html/config.php;
 
  printf "Setting file ownerships\n"
@@ -155,8 +176,7 @@ read -p "Create a password for the 'radius' user for the mysql 'radius' database
  
  printf "Creaing log file for UCRM scripts at /var/log/webhook_request.log\n"
  touch /var/log/webhook_request.log
- sudo chown www-data:www-data /var/log/webhook_request.log
-
+ sudo chown www-data:www-data /var/log/webhook_request.log 
  
  printf "Creaing log file rotation /var/log/webhook_request.log\n"
  echo "/var/log/webhook_request.log {" > /etc/logrotate.d/ucrm-freeradius
@@ -167,6 +187,20 @@ read -p "Create a password for the 'radius' user for the mysql 'radius' database
  echo "  notifempty" >> /etc/logrotate.d/ucrm-freeradius
  echo "}" >> /etc/logrotate.d/ucrm-freeradius
 
+ 
+ printf "Creaing log file for UCRM scripts at /var/log/unknownDevices_post.log\n"
+ touch /var/log/unknownDevices_post.log
+ sudo chown www-data:www-data /var/log/unknownDevices_post.log
+
+ printf "Creaing log file rotation /var/log/unknownDevices_post.log\n"
+ echo "/var/log/unknownDevices_post.log {" > /etc/logrotate.d/ucrm-freeradius
+ echo "  rotate 4" >> /etc/logrotate.d/ucrm-freeradius
+ echo "  weekly" >> /etc/logrotate.d/ucrm-freeradius
+ echo "  compress" >> /etc/logrotate.d/ucrm-freeradius
+ echo "  missingok" >> /etc/logrotate.d/ucrm-freeradius
+ echo "  notifempty" >> /etc/logrotate.d/ucrm-freeradius
+ echo "}" >> /etc/logrotate.d/ucrm-freeradius
+ 
 
  echo    # (optional) move to a new line
  echo    # (optional) move to a new line
