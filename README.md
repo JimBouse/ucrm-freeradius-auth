@@ -2,6 +2,8 @@
 
 This is designed and tested on Ubuntu 24.04.  It will accept requests from mikrotik DHCP servers providing AUTH or denial based on MAC addresses being "active" in UCRM.
 
+This process shoud take about 20 minutes on a clean VM.
+
 It looks for a custom attribute in UCRM called "devicemac" containing the MAC address of the client.  If you use a different custom attibute name, you can modify that in the service.edit.php file.
 Make sure you have run sudo apt update && sudo apt upgrade;
 
