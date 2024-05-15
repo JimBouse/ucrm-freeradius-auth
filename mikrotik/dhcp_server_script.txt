@@ -1,3 +1,7 @@
+#
+# Paste the below inforamtion into the "Script" section of the DHCP Server
+#
+
 /ip dhcp-server lease
 # Test if this is a Bound session and the lease is a dynamic one. Do not change older reservation
 :if (($leaseBound=1) && ([find where dynamic mac-address=$leaseActMAC]!="")) do={
