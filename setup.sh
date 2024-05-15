@@ -137,6 +137,7 @@ fi
  wget -O /var/www/html/functions.php https://raw.githubusercontent.com/jimbouse/ucrm-freeradius-auth/master/php_files/functions.php
  wget -O /var/www/html/service.edit.php https://raw.githubusercontent.com/jimbouse/ucrm-freeradius-auth/master/php_files/service.edit.php
  wget -O /var/www/html/full_update.php https://raw.githubusercontent.com/jimbouse/ucrm-freeradius-auth/master/php_files/full_update.php
+ wget -O /var/www/html/postUnknownDevices.php https://raw.githubusercontent.com/jimbouse/ucrm-freeradius-auth/master/php_files/postUnknownDevices.php
 
  printf "Downloading PHPMailer files from github then unzipping to /var/www/html/.\n";
  wget -O /tmp/phpmailer_setup.zip https://github.com/PHPMailer/PHPMailer/archive/master.zip
