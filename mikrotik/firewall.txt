@@ -1,0 +1,24 @@
+#
+# NOTE: Update the info below, replacing 1.1.1.1 with your billing server IP before pasting this into your terminal.
+#
+
+
+/ip firewall filter
+add action=accept chain=input comment="RADIUS - Billing Server allow input" src-address=1.1.1.1;
+add action=jump chain=forward comment="RADIUS - Jump to Service_Active" jump-target=Service_Active src-address-list=Service_Active;
+add action=jump chain=forward comment="RADIUS - Jump Unknown Devices that are bypassed over block." jump-target=Unknown_Device_Bypass src-address-list=Service_Unknown_Block_Bypass;
+add action=drop chain=forward comment="RADIUS - Drop unknown devices" src-address-list=Service_Unknown_Block;
+add action=accept chain=Unknown_Device_Bypass comment="RADIUS - Jump Target for Unknown_Bypass";
+add action=accept chain=forward comment="RADIUS - Allow suspended clients to billing server" src-address=1.1.1.1 src-address-list=Service_Suspended;
+add action=accept chain=forward comment="RADIUS - Allow suspended clients to DNS" dst-port=53 protocol=udp src-address-list=Service_Suspended;
+add action=accept chain=forward comment="RADIUS - Allow suspended clients to Stripe API" dst-address-list=STRIPE-API src-address-list=Service_Suspended;
+add action=accept chain=forward comment="RADIUS - Allow suspended clients to Stripe Domains" dst-address-list=STRIPE-DOMAINS src-address-list=Service_Suspended;
+add action=drop chain=forward comment="RADIUS - Drop traffic not destined to billing server" dst-address=!1.1.1.1 src-address-list=Service_Suspended;
+add action=accept chain=Service_Active comment="RADIUS - Jump Target for Service_Active";
+
+
+/ip firewall nat
+add action=accept chain=dstnat comment="RADIUS - NAT_Accept Service_Suspended HTTPS to STRIPE" dst-address-list=STRIPE-DOMAINS dst-port=443 protocol=tcp src-address-list=Service_Suspended
+add action=accept chain=dstnat comment="RADIUS - NAT_Accept Service_Suspended HTTPS to STRIPE" dst-address-list=STRIPE-API dst-port=443 protocol=tcp src-address-list=Service_Suspended
+add action=accept chain=dstnat comment="RADIUS - NAT_Accept Service_Suspended HTTPS to Billing Server" dst-address=1.1.1.1 dst-port=80,443 protocol=tcp src-address-list=Service_Suspended
+add action=dst-nat chain=dstnat comment="RADIUS - Forward port 80 traffic to billing server." dst-port=80 protocol=tcp src-address-list=Service_Suspended to-addresses=1.1.1.1 to-ports=81
