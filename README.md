@@ -5,7 +5,7 @@ This is designed and tested on Ubuntu 24.04.  It will accept requests from mikro
 This process shoud take about 20 minutes on a clean VM.
 
 It looks for a custom attribute in UCRM called "devicemac" containing the MAC address of the client.  If you use a different custom attibute name, you can modify that in the service.edit.php file.
-Make sure you have run sudo apt update && sudo apt upgrade;
+Make sure you have run sudo apt update && sudo apt upgrade before proceeding.
 
 # Type command bellow in a fresh ubuntu 24.04 server to get started and follow the prompts as they pop up.
 # sudo -i
