@@ -22,6 +22,14 @@ After that, it should stay syncronized wtih any save of a service profile.
 Run the following when still logged in as root: 
 
 mysql radius
-INSERT INTO nas (nasname, shortname, secret, description) VALUES ('1.2.3.4', 'Tower Router', 'somesecret', 'Tower router installed at 123 street');
+INSERT INTO nas (nasname, shortname, secret, description) VALUES ('YOUR.MIKROTIK.ROUTER.IP', 'Tower Router', 'YOUR_SECRET', 'Tower router installed at 123 street');
 
 # You will need to reboot the server to get everything working.  The FreeRadius service does not dynamically reload the NAS table.
+
+# You need to add the RADIUS server into the mikrotik.
+/radius add address=YOUR.RADIUS.SERVER.IP secret=YOUR_SECRET service=dhcp
+
+# You need to enable RADIUS for the DHCP server
+Open your DHCP server settings and set the "Use RADIUS" to Yes from No.
+
+# You need to apply the scripts listed in the "mikrotik" directory here in the github.
