@@ -133,7 +133,7 @@ fi
  service freeradius restart;
 
  printf "Downloading UCRM php files from github.\n";
- wget -O /var/www/html/webhook.php https://raw.githubusercontent.com/jimbouse/ucrm-freeradius-auth/master/php_files/webhook.php
+ wget -O /var/www/html/webhook_UISP.php https://raw.githubusercontent.com/jimbouse/ucrm-freeradius-auth/master/php_files/webhook_UISP.php
  wget -O /var/www/html/functions.php https://raw.githubusercontent.com/jimbouse/ucrm-freeradius-auth/master/php_files/functions.php
  wget -O /var/www/html/service.edit.php https://raw.githubusercontent.com/jimbouse/ucrm-freeradius-auth/master/php_files/service.edit.php
  wget -O /var/www/html/full_update.php https://raw.githubusercontent.com/jimbouse/ucrm-freeradius-auth/master/php_files/full_update.php
