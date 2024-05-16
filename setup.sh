@@ -141,7 +141,7 @@ fi
  wget -O /var/www/html/webhook_UISP.php https://raw.githubusercontent.com/jimbouse/ucrm-freeradius-auth/master/php_files/webhook_UISP.php
  wget -O /var/www/html/functions.php https://raw.githubusercontent.com/jimbouse/ucrm-freeradius-auth/master/php_files/functions.php
  wget -O /var/www/html/service.edit.php https://raw.githubusercontent.com/jimbouse/ucrm-freeradius-auth/master/php_files/service.edit.php
- wget -O /var/www/html/full_update.php https://raw.githubusercontent.com/jimbouse/ucrm-freeradius-auth/master/php_files/full_update.php
+ wget -O /var/www/html/full_update_UISP.php https://raw.githubusercontent.com/jimbouse/ucrm-freeradius-auth/master/php_files/full_update_UISP.php
  wget -O /var/www/html/postUnknownDevices.php https://raw.githubusercontent.com/jimbouse/ucrm-freeradius-auth/master/php_files/postUnknownDevices.php
 
  printf "Downloading PHPMailer files from github then unzipping to /var/www/html/.\n";
@@ -210,12 +210,12 @@ fi
 
  echo    # (optional) move to a new line
  echo    # (optional) move to a new line
- read -p "Schedule full sync (php /var/www/html/full_update.php) for 5 AM each day? y/n " -n 1 -r
+ read -p "Schedule full sync (php /var/www/html/full_update_UISP.php) for 5 AM each day? y/n " -n 1 -r
  echo    # (optional) move to a new line
  if [[ $REPLY =~ ^[Yy]$ ]]
  then
   crontab -l > crontab_new
-  echo "0 5 * * * root php -f /var/www/html/full_update.php" >> crontab_new
+  echo "0 5 * * * root php -f /var/www/html/full_update_UISP.php" >> crontab_new
   crontab crontab_new
   rm crontab_new
  fi
@@ -229,11 +229,11 @@ fi
  fi
  
  echo    # (optional) move to a new line
- read -p "Initiate full sync (php /var/www/html/full_update.php)? y/n " -n 1 -r
+ read -p "Initiate full sync (php /var/www/html/full_update_UISP.php)? y/n " -n 1 -r
  echo    # (optional) move to a new line
  if [[ $REPLY =~ ^[Yy]$ ]]
  then
-  php -f /var/www/html/full_update.php
+  php -f /var/www/html/full_update_UISP.php
  fi
 
 fi
