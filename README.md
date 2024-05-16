@@ -11,11 +11,12 @@ Make sure you have run sudo apt update && sudo apt upgrade before proceeding.
 # sudo -i
 # wget https://raw.githubusercontent.com/jimbouse/ucrm-freeradius-auth/master/setup.sh -O setup.sh && chmod +x setup.sh && ./setup.sh
 
-# After setup, log into UCRM and add a webhook pointing at your server.  http://your.radius.server.address/webhook.php
+# After setup, log into UCRM and add a webhook pointing at your server.  http://your.radius.server.address/webhook_UCRM.php
 Webhook event types: service.activate, service.add, service.archive, service.edit, service.end, service.postpone, service.suspend, service.suspend_cancel
+Note: Other billing providers could be supported in the future by modifying the webhook_Provider.php and full_update_Provider.php files.
 
-# Run "php -f /var/www/html/full_update.php" to initiate the full sync.
-The script will prompt you to set a cronjob to run full_update.php nightly just to make sure.
+# Run "php -f /var/www/html/full_update_UISP.php" to initiate the full sync.
+The script will prompt you to set a cronjob to run full_update_UISP.php nightly just to make sure.
 After that, it should stay syncronized wtih any save of a service profile.
 
 # You will need to add your mikrotik routers to the NAS table:
