@@ -1,0 +1,63 @@
+/system script add dont-require-permissions=no name=send_unknown_devices source="#\r\
+    \n# Modify radiusHost to match the hostname and port of your radius host VM\r\
+    \n#\r\
+    \n:global radiusHost \"http://radius.mydomain.com\";\r\
+    \n:global wanGateway;\r\
+    \n:global wanIP;\r\
+    \n:global postData \"\";\r\
+    \n:do {\r\
+    \n  :set wanGateway [/ip route get value-name=gateway [/ip route find where dst-address=\"0.0.0.0/0\" && active=yes]]; \r\
+    \n} on-error={\r\
+    \n  :set wanGateway [/ip route get value-name=gateway [/ip route find where dst-address=\"0.0.0.0/0\"]]; \r\
+    \n};\r\
+    \n\r\
+    \n:foreach row in=[/ip address find where disabled=no] do={\r\
+    \n\r\
+    \n  :local address [/ip address get value-name=address \$row];\r\
+    \n\r\
+    \n  :local network [/ip address get value-name=network \$row];\r\
+    \n\r\
+    \n  :local wanSubnet (\$network.\"/\".[:pick \$address ([:find \$address \"/\"]+1) [:len \$address]]);\r\
+    \n\r\
+    \n  :if (\$wanGateway in \$wanSubnet) do={\r\
+    \n    :set wanIP [:pick \$address 0 [:find \$address \"/\"]];\r\
+    \n  }\r\
+    \n}\r\
+    \n\r\
+    \n:local ident [/system/identity/get value-name=name];\r\
+    \n:local sn [/system routerboard get value-name=serial-number];\r\
+    \n:local httpPort [/ip service get value-name=port www];\r\
+    \n\r\
+    \n# Buidling JSON to transmit to server\r\
+    \n:set postData (\$postData.\"[ \");\r\
+    \n:foreach fwlist in=[/ip firewall address-list find where list=\"Service_Unknown_Device\"] do={\r\
+    \n  :foreach ip in=[/ip firewall address-list get \$fwlist value-name=address] do={\r\
+    \n    :local lease [/ip dhcp-server lease find where active-address=\$ip];\r\
+    \n    :local mac [/ip dhcp-server lease get value-name=mac-address \$lease];\r\
+    \n    :local hostname [/ip dhcp-server lease get value-name=host-name \$lease];\r\
+    \n    :local agentCircuitId [/ip dhcp-server lease get value-name=agent-circuit-id \$lease];\r\
+    \n    :local agentRemoteId [/ip dhcp-server lease get value-name=agent-remote-id \$lease];\r\
+    \n    :local interface [/interface/bridge/host/get value-name=interface [/interface/bridge/host/ find where mac-address=\$mac]];\r\
+    \n    :local timeout [/ip firewall/address-list/get value-name=timeout [/ip firewall address-list find where list=\"Service_Unknown_Block_Bypass\" && address=\$ip]];\r\
+    \n\r\
+    \n    if ([:len \$postData] > 2) do={ :set postData (\$postData.\",\"); };\r\
+    \n    :set postData (\$postData.\"{ \");\r\
+    \n    :set postData (\$postData.\"\\\"leasedIP\\\": \\\"\$ip\\\",\");\r\
+    \n    :set postData (\$postData.\"\\\"mac\\\": \\\"\$mac\\\",\");\r\
+    \n    :set postData (\$postData.\"\\\"hostname\\\": \\\"\$hostname\\\",\");\r\
+    \n    :set postData (\$postData.\"\\\"circuitId\\\": \\\"\$agentCircuitId\\\",\");\r\
+    \n    :set postData (\$postData.\"\\\"remoteId\\\": \\\"\$agentRemoteId\\\",\");\r\
+    \n    :set postData (\$postData.\"\\\"interface\\\": \\\"\$interface\\\",\");\r\
+    \n    :set postData (\$postData.\"\\\"timeout\\\": \\\"\$timeout\\\"\");\r\
+    \n    :set postData (\$postData.\" }\");\r\
+    \n\r\
+    \n  };\r\
+    \n};\r\
+    \n:set postData (\$postData.\" ]\");\r\
+    \n\r\
+    \n:set postData (\"{ \\\"ident\\\": \\\"\$[/system/identity/get value-name=name]\\\", \\\"wanIP\\\": \\\"\$wanIP\\\", \\\"httpPort\\\": \\\"\$httpPort\\\", \\\"data\\\": \$postData }\");\r\
+    \n\r\
+    \n/tool fetch http-method=post http-header-field=\"Content-Type: application/json\" http-data=\$postData url=\"\$radiusHost/postUnknownDevices.php\";";
+
+
+/system scheduler add disabled=no interval=1d name=Send_Unknown_Devices on-event="/system script run send_unknown_devices;" start-time=10:00:00;
