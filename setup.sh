@@ -20,16 +20,21 @@ read -p "What is the hostname or IP address of the UCRM Instance? " ucrmhost;
 read -p "What is the API Key for UCRM? " ucrmkey;
 read -p "Create a password for the 'radius' user for the mysql 'radius' database: " sqlpass;
 
-read -p "Enter your SMTP Host. If left blank, no messages will be mailed: " smtphost;
-read -p "Enter your SMTP port: " smtpport;
-read -p "Enter your SMTP from address: " smtpfrom;
-read -p "Enter your SMTP to address: " smtpto;
-read -p "Do you need to authenticate with your SMTP host? y/n " -n 1 -r
+read -p "Do you want the system to email you a list of unknown devices daily (requires script/schedule to be added to Mikrotik)? y/n " -n 1 -r
 echo;
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
-  read -p "Enter your SMTP username: " smtpuser;
-  read -p "Enter your SMTP password: " smtppass;
+  read -p "Enter your SMTP Host. If left blank, no messages will be mailed: " smtphost;
+  read -p "Enter your SMTP port: " smtpport;
+  read -p "Enter your SMTP from address: " smtpfrom;
+  read -p "Enter your SMTP to address: " smtpto;
+  read -p "Do you need to authenticate with your SMTP host? y/n " -n 1 -r
+  echo;
+  if [[ $REPLY =~ ^[Yy]$ ]]
+  then
+    read -p "Enter your SMTP username: " smtpuser;
+    read -p "Enter your SMTP password: " smtppass;
+  fi
 fi
 
 # Installing packages 
