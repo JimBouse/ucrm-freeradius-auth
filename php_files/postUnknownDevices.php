@@ -72,6 +72,7 @@ foreach ($json['data'] as $device) {
 		$body .= "Circuit ID: ".$device['circuitId']."<br>";
 	}
 	$body .= "Interface on router: ".$device['interface']."<br>";
+	$body .= "Time until block: ".str_replace("d", " day(s) ", $device['timeout'])."<br>";
 	$body .= "<br>";
 }
 
