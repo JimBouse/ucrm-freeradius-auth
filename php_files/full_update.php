@@ -15,7 +15,7 @@ foreach ($ucrmServices as $service) {
   $json = json_encode($data);
 
   $ch = curl_init();
-  curl_setopt($ch, CURLOPT_URL, "http://localhost/webhook.php");
+  curl_setopt($ch, CURLOPT_URL, "http://localhost/webhook_UISP.php");
   curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
   curl_setopt($ch, CURLOPT_HEADER, FALSE);
 
