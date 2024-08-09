@@ -22,8 +22,6 @@
     };
   }
 
-  :log info $leaseActIP;
-  :log info $leaseActMAC;
 #
 # This portion of the script is responible for telling the DHCP server about the queue name so it can be referenced by external processes
 # Modify radiusHost to match the hostname and port of your radius host VM
