@@ -224,9 +224,12 @@ fi
  echo    # (optional) move to a new line
  if [[ $REPLY =~ ^[Yy]$ ]]
  then
-  wget -O /tmp/add_sql_trigger.sql https://raw.githubusercontent.com/jimbouse/ucrm-freeradius-auth/master/add_sql_trigger.sql
+  wget -O /tmp/add_sql_trigger.sql https://raw.githubusercontent.com/jimbouse/ucrm-freeradius-auth/master/sql/add_sql_trigger.sql
   mysql radius < /tmp/add_sql_trigger.sql
  fi
+
+wget -O /tmp/add_queue_name.sql https://raw.githubusercontent.com/jimbouse/ucrm-freeradius-auth/master/sql/add_queue_name.sql
+mysql radius < /tmp/add_queue_name.sql
  
  echo    # (optional) move to a new line
  read -p "Initiate full sync (php /var/www/html/full_update_UISP.php)? y/n " -n 1 -r
