@@ -1,23 +1,43 @@
-#
-# Paste the below inforamtion into the "Script" section of the DHCP Server
-#
-
 /ip dhcp-server lease
-# Test if this is a Bound session and the lease is a dynamic one. Do not change older reservation
-:if (($leaseBound=1) && ([find where dynamic mac-address=$leaseActMAC]!="")) do={
-  :log info message="IP=$leaseActIP"
-  :if ([:len [/ip firewall/address-list/find where address=$leaseActIP && list=Service_Unknown_Device]] > 0) do={ 
-      :do {
-        /ip firewall/address-list/add list=Service_Unknown_Block_Bypass timeout=7d address=$leaseActIP; 
-      } on-error= { 
-        :log info "$leaseActIP already in Service_Unknown_Block_Bypass list"; 
-      };
-      :do {
-        /ip firewall/address-list/add list=Service_Unknown_Block address=$leaseActIP; 
-      } on-error= { 
-        :log info "$leaseActIP already in Service_Unknown_Block list"; 
-      };
-  } else {
-    /ip firewall/address-list/remove [/ip firewall/address-list/find where address=$leaseActIP && list=Service_Unknown_Block];
-  };
+:if ($leaseBound=1) do={
+  :if ([find where dynamic mac-address=$leaseActMAC]!="") do={
+
+  #
+  # This portion of the script is responible for adding unknown devices to a list so they are blocked.
+  #
+
+    :if ([:len [/ip firewall/address-list/find where address=$leaseActIP && list=Service_Unknown_Device]] > 0) do={ 
+        :do {
+          /ip firewall/address-list/add list=Service_Unknown_Block_Bypass timeout=7d address=$leaseActIP; 
+        } on-error= { 
+          :log info "$leaseActIP already in Service_Unknown_Block_Bypass list"; 
+        };
+        :do {
+          /ip firewall/address-list/add list=Service_Unknown_Block address=$leaseActIP; 
+        } on-error= { 
+          :log info "$leaseActIP already in Service_Unknown_Block list"; 
+        };
+    } else {
+      /ip firewall/address-list/remove [/ip firewall/address-list/find where address=$leaseActIP && list=Service_Unknown_Block];
+    };
+  }
+
+  :log info $leaseActIP;
+  :log info $leaseActMAC;
+#
+# This portion of the script is responible for telling the DHCP server about the queue name so it can be referenced by external processes
+# Modify radiusHost to match the hostname and port of your radius host VM
+#
+  :local queue [/queue/simple/get value-name=name [/queue/simple/find where target~$leaseActIP]];
+
+  :global postData "";
+   :set postData ($postData."[ {");
+    :set postData ($postData."\"queue\": \"".$queue."\",");
+    :set postData ($postData."\"mac\": \"".$leaseActMAC."\",");
+   :set postData ($postData." } ]");
+
+  :set postData ("{ \"ident\": \"$[/system/identity/get value-name=name]\", \"wanIP\": \"$wanIP\", \"httpPort\": \"$[/ip service/get value-name=port www]\", \"data\": $postData }");
+  /tool fetch http-method=post http-header-field="Content-Type: application/json" http-data=$postData url="$radiusHost/postQueue.php";
+
+
 }
