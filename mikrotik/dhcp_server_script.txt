@@ -32,6 +32,7 @@
    :set postData ($postData."[ {");
     :set postData ($postData."\"queue\": \"".$queue."\",");
     :set postData ($postData."\"mac\": \"".$leaseActMAC."\",");
+    :set postData ($postData."\"ip\": \"".$leaseActIP."\"");
    :set postData ($postData." } ]");
 
   :set postData ("{ \"ident\": \"$[/system/identity/get value-name=name]\", \"wanIP\": \"$wanIP\", \"httpPort\": \"$[/ip service/get value-name=port www]\", \"data\": $postData }");
