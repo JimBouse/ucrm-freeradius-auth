@@ -233,7 +233,7 @@ wget -O /tmp/add_queue_name.sql https://raw.githubusercontent.com/jimbouse/ucrm-
 mysql radius < /tmp/add_queue_name.sql
  
  echo    # (optional) move to a new line
- read -p "Initiate full sync (php /var/www/html/full_update_UISP.php)? y/n " -n 1 -r
+ read -p "Initiate full sync (php -f /var/www/html/full_update_UISP.php)? y/n " -n 1 -r
  echo    # (optional) move to a new line
  if [[ $REPLY =~ ^[Yy]$ ]]
  then
