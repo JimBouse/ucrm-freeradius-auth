@@ -28,7 +28,7 @@ INSERT INTO nas (nasname, shortname, secret, description) VALUES ('YOUR.MIKROTIK
 # You will need to reboot the server to get everything working.  The FreeRadius service does not dynamically reload the NAS table.
 
 # You need to add the RADIUS server into the mikrotik.
-/radius add address=YOUR.RADIUS.SERVER.IP secret=YOUR_SECRET service=dhcp
+/radius add address=YOUR.RADIUS.SERVER.IP secret=YOUR_SECRET service=dhcp src-address=YOUR.MIKROTIK.IP.ADDRESS
 
 # You need to enable RADIUS for the DHCP server
 Open your DHCP server settings and set the "Use RADIUS" to Yes from No.
