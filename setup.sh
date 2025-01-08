@@ -144,6 +144,7 @@ fi
  wget -O /var/www/html/full_update_UISP.php https://raw.githubusercontent.com/jimbouse/ucrm-freeradius-auth/master/php_files/full_update_UISP.php
  wget -O /var/www/html/postUnknownDevices.php https://raw.githubusercontent.com/jimbouse/ucrm-freeradius-auth/master/php_files/postUnknownDevices.php
  wget -O /var/www/html/postQueue.php https://raw.githubusercontent.com/jimbouse/ucrm-freeradius-auth/master/php_files/postQueue.php
+ wget -O /var/www/html/getQueueInfo.php https://raw.githubusercontent.com/jimbouse/ucrm-freeradius-auth/master/php_files/getQueueInfo.php
 
  printf "Downloading PHPMailer files from github then unzipping to /var/www/html/.\n";
  wget -O /tmp/phpmailer_setup.zip https://github.com/PHPMailer/PHPMailer/archive/master.zip
