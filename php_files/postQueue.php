@@ -40,7 +40,13 @@ if(!is_array($json)){
 
 //fwrite($fp, "\n".print_r($json, TRUE));
 
-$sql = "REPLACE INTO queue_name (`mac`, `queue`, `wanIP`, `www_port`, `ip`) VALUES ('".mysqli_real_escape_string($link, $json['data']['mac'])."', '".mysqli_real_escape_string($link, $json['data']['queue'])."', '".mysqli_real_escape_stri>
+$sql = "REPLACE INTO queue_name (`mac`, `queue`, `wanIP`, `www_port`, `ip`) VALUES (
+    '".mysqli_real_escape_string($link, $json['data']['mac'])."', 
+    '".mysqli_real_escape_string($link, $json['data']['queue'])."', 
+    '".mysqli_real_escape_string($link, $json['wanIP'])."',
+    '".mysqli_real_escape_string($link, $json['httpPort'])."',
+    '".mysqli_real_escape_string($link, $json['data']['ip'])."'
+    )";
 //fwrite($fp, "\n".$sql);
 $result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
 
