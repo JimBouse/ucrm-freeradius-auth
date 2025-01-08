@@ -29,14 +29,14 @@
   :local queue [/queue/simple/get value-name=name [/queue/simple/find where target~$leaseActIP]];
 
   :global postData "";
-   :set postData ($postData."[ {");
+   :set postData ($postData."{");
     :set postData ($postData."\"queue\": \"".$queue."\",");
     :set postData ($postData."\"mac\": \"".$leaseActMAC."\",");
     :set postData ($postData."\"ip\": \"".$leaseActIP."\"");
-   :set postData ($postData." } ]");
+   :set postData ($postData." }");
 
-  :set postData ("{ \"ident\": \"$[/system/identity/get value-name=name]\", \"wanIP\": \"$wanIP\", \"httpPort\": \"$[/ip service/get value-name=port www]\", \"data\": $postData }");
-  /tool fetch http-method=post http-header-field="Content-Type: application/json" http-data=$postData url="$radiusHost/postQueue.php";
+  :set postData ("{ \"ident\": \"$[/system/identity/get value-name=name]\", \"wanIP\": \"$[/radius/get value-name="src-address" [/radius/find where disabled=no service="dhcp"]]\", \"httpPort\": \"$[/ip service/get value-name=port www]\", \"data\": $postData }");
+  /tool fetch http-method=post http-header-field="Content-Type: application/json" http-data=$postData url="http://radius.brazoswifi.com/postQueue.php";
 
 
 }
