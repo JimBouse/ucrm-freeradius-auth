@@ -1,11 +1,8 @@
 <?php
 require_once('config.php');
 require_once('functions.php');
-require_once('PHPMailer-master/src/Exception.php');
-require_once('PHPMailer-master/src/PHPMailer.php');
-require_once('PHPMailer-master/src/SMTP.php');
 
-$fp = fopen('/var/log/unknownDevices_post.log', 'a+');
+//$fp = fopen('/var/log/unknownDevices_post.log', 'a+');
 //fwrite($fp, "\n".trim(file_get_contents("php://input")));
 
 
