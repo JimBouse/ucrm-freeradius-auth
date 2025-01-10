@@ -50,7 +50,7 @@ if ($json['extraData']['entity']['servicePlanType'] == 'Internet') {
 
 		// Make sure radgroupreply table is setup correctly.
 		checkRadGroupReply($json['extraData']['entity']['servicePlanName'], 'Mikrotik-Rate-Limit', '=', $json['extraData']['entity']['uploadSpeed']."M/".$json['extraData']['entity']['downloadSpeed']."M");
-		checkRadGroupReply('".$json['extraData']['entity']['servicePlanName']."', 'Fall-Through', '=', 'Yes');
+		checkRadGroupReply($json['extraData']['entity']['servicePlanName'], 'Fall-Through', '=', 'Yes');
 
 		die;
 
