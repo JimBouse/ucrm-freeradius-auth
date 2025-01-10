@@ -1,7 +1,7 @@
 <?php
-function checkRadGroupReply(groupname, attribute, op, value) {
+function checkRadGroupReply($groupname, $attribute, $op, $value) {
 	global $fp, $link;
-	$sql = "DELETE FROM radgroupreply WHERE groupname = '".$groupname."' AND attribute = '".$attribute."' AND (op <> '".$op."' OR value <> '".$json['extraData']['entity']['uploadSpeed']."M/".$json['extraData']['entity']['downloadSpeed']."M')";
+	$sql = "DELETE FROM radgroupreply WHERE groupname = '".$groupname."' AND attribute = '".$attribute."' AND (op <> '".$op."' OR value <> '".$value."')";
 	fwrite($fp, "\n".$sql);
 }
 $customAttribKeyForMAC = 0;
