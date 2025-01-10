@@ -5,7 +5,7 @@ function checkRadGroupReply($groupname, $attribute, $op, $value) {
 	fwrite($fp, "\n".$sql);
 	$result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
 
-	$sql = "INSERT INTO radgroupreply (groupname, attribute, op, value) (SELECT '".$groupname."', '".$attribute."', '".$op."', '".$value."' WHERE NOT EXISTS (SELECT FROM radgroupreply WHERE groupname ='".$groupname."' AND attribute = '".$attribute."' AND op = '".$op."' AND value = '".$value."')";
+	$sql = "INSERT INTO radgroupreply (groupname, attribute, op, value) (SELECT '".$groupname."', '".$attribute."', '".$op."', '".$value."' WHERE NOT EXISTS (SELECT true FROM radgroupreply WHERE groupname ='".$groupname."' AND attribute = '".$attribute."' AND op = '".$op."' AND value = '".$value."'))";
 	fwrite($fp, "\n".$sql);
 	$result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
 
