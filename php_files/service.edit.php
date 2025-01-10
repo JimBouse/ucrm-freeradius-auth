@@ -36,22 +36,36 @@ if ($json['extraData']['entity']['servicePlanType'] == 'Internet') {
 		fwrite($fp, "\n".$sql);
 		$result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
 
+		// Make sure radgroupreply table is setup correctly.
+
+		$sql = "DELETE FROM radgroupreply WHERE groupname ='".$json['extraData']['entity']['servicePlanName']."' AND attribute = 'Mikrotik-Rate-Limit' AND value <> '".$json['extraData']['entity']['servicePlanName']."', 'Mikrotik-Rate-Limit', '=', '".$json['extraData']['entity']['uploadSpeed']."M/".$json['extraData']['entity']['downloadSpeed']."M'";
+		fwrite($fp, "\n".$sql);
+		$result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
+		$sql = "INSERT INTO radgroupreply (groupname, attribute, op, value) 
+  			 VALUES ('".$json['extraData']['entity']['servicePlanName']."', 'Mikrotik-Rate-Limit', '=', '".$json['extraData']['entity']['uploadSpeed']."M/".$json['extraData']['entity']['downloadSpeed']."M'),('".$json['extraData']['entity']['servicePlanName']."', 'Fall-Through', '=', 'Yes')
+      			 WHERE NOT EXISTS(DELETE FROM radgroupreply WHERE groupname ='".$json['extraData']['entity']['servicePlanName']."' AND attribute = 'Mikrotik-Rate-Limit' AND value <> '".$json['extraData']['entity']['servicePlanName']."', 'Mikrotik-Rate-Limit', '=', '".$json['extraData']['entity']['uploadSpeed']."M/".$json['extraData']['entity']['downloadSpeed']."M')";
+		fwrite($fp, "\n".$sql);
+		$result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
+die;
 		$radGroupReply_MikrotikRateLimit = 1;
 		$radGroupReply_MikrotikAddressListPreparedService = 1;
 		$radGroupReply_MikrotikAddressListActiveService = 1;
 		$radGroupReply_MikrotikAddressListEndedService = 1;
 		$radGroupReply_MikrotikAddressListSuspendedService = 1;
 		$radGroupReply_MikrotikAddressListUnknownDeviceService = 1;
-		$sql = "SELECT attribute, value FROM radgroupreply";
+		$sql = "SELECT groupname, attribute, op, value FROM radgroupreply";
 		$result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
+		
 		while ($row = mysqli_fetch_assoc($result)) {
-				if ($row['attribute'] == 'Mikrotik-Rate-Limit') {
-						if ($row['value'] == $json['extraData']['entity']['uploadSpeed']."M/".$json['extraData']['entity']['downloadSpeed']."M") {
-								$radGroupReply_MikrotikRateLimit = 0;
-						}
+			if ($row['attribute'] == 'Mikrotik-Rate-Limit') {
+				if ($row['value'] !== $json['extraData']['entity']['uploadSpeed']."M/".$json['extraData']['entity']['downloadSpeed']."M") {
+					
+					
+					
 				}
-				if ($row['attribute'] == 'Mikrotik-Address-List') {
-						if ($row['value'] == "Service_Prepared") {
+			}
+			if ($row['attribute'] == 'Mikrotik-Address-List') {
+				if ($row['value'] == "Service_Prepared") {
 							   $radGroupReply_MikrotikAddressListPreparedService = 0;
 						}
 						if ($row['value'] == "Service_Active") {
@@ -105,7 +119,7 @@ if ($json['extraData']['entity']['servicePlanType'] == 'Internet') {
 				fwrite($fp, "\n".$sql);
 				$result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
 				
-				$sql = "INSERT INTO radgroupreply (groupname, attribute, op, value) VALUES ('Service_Ended', 'Mikrotik-Address-List', ':=', 'Service_Ended'),('Service_Ended_IP_Pool', 'Framed-Pool', ':=', 'Service_Ended'),('Service_Ended', 'Session-Timeout', ':=', '60'),('Service_Ended', 'Fall-Through', '=', 'Yes')";
+				$sql = "INSERT INTO radgroupreply (groupname, attribute, op, value) VALUES ('Service_Ended', 'Mikrotik-Address-List', ':=', 'Service_Ended'),('Service_Ended', 'Framed-Pool', ':=', 'Service_Ended_IP_Pool'),('Service_Ended', 'Session-Timeout', ':=', '60'),('Service_Ended', 'Fall-Through', '=', 'Yes')";
 				fwrite($fp, "\n".$sql);
 				$result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
 		}
@@ -131,7 +145,7 @@ if ($json['extraData']['entity']['servicePlanType'] == 'Internet') {
 				$result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
 		}
 
-		
+		// this section is executed if a speed override is applied.
 		if (intval($json['extraData']['entity']['trafficShapingOverrideEnabled']) == 1) {
 				$download = $json['extraData']['entity']['downloadSpeedOverride'];
 				$upload = $json['extraData']['entity']['uploadSpeedOverride'];
