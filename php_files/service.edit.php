@@ -41,9 +41,26 @@ if ($json['extraData']['entity']['servicePlanType'] == 'Internet') {
 		$sql = "DELETE FROM radgroupreply WHERE groupname ='".$json['extraData']['entity']['servicePlanName']."' AND attribute = 'Mikrotik-Rate-Limit' AND value <> '".$json['extraData']['entity']['servicePlanName']."', 'Mikrotik-Rate-Limit', '=', '".$json['extraData']['entity']['uploadSpeed']."M/".$json['extraData']['entity']['downloadSpeed']."M'";
 		fwrite($fp, "\n".$sql);
 		$result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
-		$sql = "INSERT INTO radgroupreply (groupname, attribute, op, value) 
-  			 VALUES ('".$json['extraData']['entity']['servicePlanName']."', 'Mikrotik-Rate-Limit', '=', '".$json['extraData']['entity']['uploadSpeed']."M/".$json['extraData']['entity']['downloadSpeed']."M'),('".$json['extraData']['entity']['servicePlanName']."', 'Fall-Through', '=', 'Yes')
-      			 WHERE NOT EXISTS(DELETE FROM radgroupreply WHERE groupname ='".$json['extraData']['entity']['servicePlanName']."' AND attribute = 'Mikrotik-Rate-Limit' AND value <> '".$json['extraData']['entity']['servicePlanName']."', 'Mikrotik-Rate-Limit', '=', '".$json['extraData']['entity']['uploadSpeed']."M/".$json['extraData']['entity']['downloadSpeed']."M')";
+		$sql = "INSERT INTO radgroupreply (
+  				groupname, 
+      				attribute, 
+	  			op, 
+      				value
+	  			) 
+  			 VALUES (
+      				'".$json['extraData']['entity']['servicePlanName']."', 
+	  			'Mikrotik-Rate-Limit', 
+      				'=', 
+	  			'".$json['extraData']['entity']['uploadSpeed']."M/".$json['extraData']['entity']['downloadSpeed']."M'
+      				)
+      			 WHERE NOT EXISTS(
+	  			SELECT FROM radgroupreply WHERE 
+      					groupname ='".$json['extraData']['entity']['servicePlanName']."' AND 
+	   				attribute = 'Mikrotik-Rate-Limit' AND 
+					op = '=' AND
+					value = '".$json['extraData']['entity']['servicePlanName']."'
+     				)
+	 		";
 		fwrite($fp, "\n".$sql);
 		$result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
 die;
