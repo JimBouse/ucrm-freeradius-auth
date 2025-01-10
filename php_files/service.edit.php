@@ -38,7 +38,7 @@ if ($json['extraData']['entity']['servicePlanType'] == 'Internet') {
 
 		// Make sure radgroupreply table is setup correctly.
 
-		$sql = "DELETE FROM radgroupreply WHERE groupname ='".$json['extraData']['entity']['servicePlanName']."' AND attribute = 'Mikrotik-Rate-Limit' AND value <> '".$json['extraData']['entity']['servicePlanName']."', 'Mikrotik-Rate-Limit', '=', '".$json['extraData']['entity']['uploadSpeed']."M/".$json['extraData']['entity']['downloadSpeed']."M'";
+		$sql = "DELETE FROM radgroupreply WHERE groupname = '".$json['extraData']['entity']['servicePlanName']."' AND attribute = 'Mikrotik-Rate-Limit' AND value <> '".$json['extraData']['entity']['uploadSpeed']."M/".$json['extraData']['entity']['downloadSpeed']."M'";
 		fwrite($fp, "\n".$sql);
 		$result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
 		$sql = "INSERT INTO radgroupreply (
