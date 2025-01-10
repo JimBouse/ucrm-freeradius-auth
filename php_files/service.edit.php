@@ -1,4 +1,9 @@
 <?php
+function checkRadGroupReply(groupname, attribute, op, value) {
+	global $fp, $link;
+	$sql = "DELETE FROM radgroupreply WHERE groupname = '".$groupname."' AND attribute = '".$attribute."' AND (op <> '".$op."' OR value <> '".$json['extraData']['entity']['uploadSpeed']."M/".$json['extraData']['entity']['downloadSpeed']."M')";
+	fwrite($fp, "\n".$sql);
+}
 $customAttribKeyForMAC = 0;
 // get MAC from attributes list.
 foreach ($json['extraData']['entity']['attributes'] as $attrib) {
@@ -37,17 +42,12 @@ if ($json['extraData']['entity']['servicePlanType'] == 'Internet') {
 		$result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
 
 		// Make sure radgroupreply table is setup correctly.
-
+		checkRadGroupReply($json['extraData']['entity']['servicePlanName'], 'Mikrotik-Rate-Limit', '=', $json['extraData']['entity']['uploadSpeed']."M/".$json['extraData']['entity']['downloadSpeed']."M");
+die;
 		$sql = "DELETE FROM radgroupreply WHERE groupname = '".$json['extraData']['entity']['servicePlanName']."' AND attribute = 'Mikrotik-Rate-Limit' AND value <> '".$json['extraData']['entity']['uploadSpeed']."M/".$json['extraData']['entity']['downloadSpeed']."M'";
 		fwrite($fp, "\n".$sql);
 		$result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
-		$sql = "INSERT INTO radgroupreply (
-  				groupname, 
-      				attribute, 
-	  			op, 
-      				value
-	  			) 
-  			 VALUES (
+		$sql = "INSERT INTO radgroupreply (groupname, attribute, op, value) VALUES (
       				'".$json['extraData']['entity']['servicePlanName']."', 
 	  			'Mikrotik-Rate-Limit', 
       				'=', 
