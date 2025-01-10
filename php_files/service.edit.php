@@ -105,7 +105,7 @@ if ($json['extraData']['entity']['servicePlanType'] == 'Internet') {
 				fwrite($fp, "\n".$sql);
 				$result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
 				
-				$sql = "INSERT INTO radgroupreply (groupname, attribute, op, value) VALUES ('Service_Ended', 'Mikrotik-Address-List', ':=', 'Service_Ended'),('Service_Ended', 'Session-Timeout', ':=', '60'),('Service_Ended', 'Fall-Through', '=', 'Yes')";
+				$sql = "INSERT INTO radgroupreply (groupname, attribute, op, value) VALUES ('Service_Ended', 'Mikrotik-Address-List', ':=', 'Service_Ended'),('Service_Ended_IP_Pool', 'Framed-Pool', ':=', 'Service_Ended'),('Service_Ended', 'Session-Timeout', ':=', '60'),('Service_Ended', 'Fall-Through', '=', 'Yes')";
 				fwrite($fp, "\n".$sql);
 				$result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
 		}
