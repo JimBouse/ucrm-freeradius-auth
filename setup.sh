@@ -18,6 +18,9 @@ then
 # Gathering information
 read -p "What is the hostname or IP address of the UCRM Instance? " ucrmhost;
 read -p "What is the API Key for UCRM? " ucrmkey;
+printf '\nYou need to create 2 custom attributes for the service: Device Mac and Framed-Route. Go to your https://UCRM_instance/crm/system/other/custom-attributes to add them.';
+read -p "What is the UCRM custom attribute ID for the Service Device MAC? " ucrmmackey;
+read -p "What is the UCRM custom attribute ID for the Service Framed-Route? " ucrmframedroutekey;
 read -p "Create a password for the 'radius' user for the mysql 'radius' database: " sqlpass;
 
 read -p "Do you want the system to email you a list of unknown devices daily (requires script/schedule to be added to Mikrotik)? y/n " -n 1 -r
@@ -168,6 +171,8 @@ fi
  echo "\$db = 'radius';" >> /var/www/html/config.php;
  echo "\$uispUrl = '$ucrmhost';" >> /var/www/html/config.php;
  echo "\$uispKey = '$ucrmkey';" >> /var/www/html/config.php;
+ echo "\$uispCustomAttribDeviceMac = '$ucrmmackey';" >> /var/www/html/config.php;
+ echo "\$uispCustomAttribFramedRoute = '$ucrmframedroutekey';" >> /var/www/html/config.php;
  echo "\$smtpHost = '$smtphost';" >> /var/www/html/config.php;
  echo "\$smtpPort = $smtpport;" >> /var/www/html/config.php;
  echo "\$smtpFrom = '$smtpfrom';" >> /var/www/html/config.php;
