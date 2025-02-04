@@ -18,7 +18,7 @@ then
 # Gathering information
 read -p "What is the hostname or IP address of the UCRM Instance? " ucrmhost;
 read -p "What is the API Key for UCRM? " ucrmkey;
-printf '\nYou need to create 2 custom attributes for the service: Device Mac and Framed-Route. Go to your https://UCRM_instance/crm/system/other/custom-attributes to add them.';
+printf '\nYou need to create 2 SERVICE TYPE custom attributes: "Device MAC" and "Framed-Route". Go to your https://UCRM_instance/crm/system/other/custom-attributes to add them.';
 read -p "What is the UCRM custom attribute ID for the Service Device MAC? " ucrmmackey;
 read -p "What is the UCRM custom attribute ID for the Service Framed-Route? " ucrmframedroutekey;
 read -p "Create a password for the 'radius' user for the mysql 'radius' database: " sqlpass;
