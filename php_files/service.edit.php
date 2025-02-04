@@ -11,24 +11,28 @@ function checkRadGroupReply($groupname, $attribute, $op, $value) {
 
 	return;
 }
-$customAttribKeyForMAC = 0;
+$needsRadReplyFallThrough = 0;
+$framedRouteArray = array();
 // get MAC from attributes list.
 foreach ($json['extraData']['entity']['attributes'] as $attrib) {
-        if (strtolower($attrib['key']) == 'devicemac' && preg_match('/^(?:(?:[0-9a-f]{2}[\:]{1}){5}|(?:[0-9a-f]{2}[-]{1}){5}|(?:[0-9a-f]{2}){5})[0-9a-f]{2}$/i', $attrib['value'])) {
+        if ($attrib['customAttributeId'] == $uispCustomAttribDeviceMac && preg_match('/^(?:(?:[0-9a-f]{2}[\:]{1}){5}|(?:[0-9a-f]{2}[-]{1}){5}|(?:[0-9a-f]{2}){5})[0-9a-f]{2}$/i', $attrib['value'])) {
                 $mac = $attrib['value'];
-				$customAttribKeyForMAC = $attrib['customAttributeId'];
-        } elseif (strtolower($attrib['key']) == 'devicemac' && !empty($attrib['value'])) {
-                // not a MAC address.  Likely a static IP or Business Client
-                $deviceMacValue = $attrib['value'];
-        } 
+        }
+
+	if ($attrib['customAttributeId'] == $uispCustomAttribFramedRoute && !empty($attrib['value'])) {
+		$framedRouteArray = explode(",", $attrib['value']);
+	}
 }
 if (array_key_exists('entityBeforeEdit', $json['extraData'])) {
 	foreach ($json['extraData']['entityBeforeEdit']['attributes'] as $attrib) {
-	        if ($attrib['key'] == 'devicemac' && preg_match('/^(?:(?:[0-9a-f]{2}[\:]{1}){5}|(?:[0-9a-f]{2}[-]{1}){5}|(?:[0-9a-f]{2}){5})[0-9a-f]{2}$/i', $attrib['value'])) {
+	        if ($attrib['customAttributeId'] == $uispCustomAttribDeviceMac && preg_match('/^(?:(?:[0-9a-f]{2}[\:]{1}){5}|(?:[0-9a-f]{2}[-]{1}){5}|(?:[0-9a-f]{2}){5})[0-9a-f]{2}$/i', $attrib['value'])) {
 	                $oldmac = $attrib['value'];
 	        }
 	}
 }
+
+// trim any whitespace from Framed-Route array.
+$framedRouteArray = array_map('trim', $framedRouteArray);
 
 if ($json['extraData']['entity']['servicePlanType'] == 'Internet') {
 
@@ -77,32 +81,59 @@ if ($json['extraData']['entity']['servicePlanType'] == 'Internet') {
 
 		// this section is executed if a speed override is applied.
 		if (intval($json['extraData']['entity']['trafficShapingOverrideEnabled']) == 1) {
-				$download = $json['extraData']['entity']['downloadSpeedOverride'];
-				$upload = $json['extraData']['entity']['uploadSpeedOverride'];
-				fwrite($fp, "\nApplying speed override ".$download."/".$upload." to ".$mac);
-				
-				$sql = "INSERT INTO radreply (username, attribute, op, value) (SELECT '".$mac."', 'Mikrotik-Rate-Limit', '=', '".$upload."M/".$download."M' WHERE NOT EXISTS(SELECT username FROM radreply WHERE username = '".$mac."' AND attribute = 'Mikrotik-Rate-Limit'))";
-				fwrite($fp, "\n".$sql);
-				$result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
-				
-				$sql = "UPDATE radreply SET value = '".$upload."M/".$download."M' WHERE username = '".$mac."' AND attribute = 'Mikrotik-Rate-Limit' AND value <> '".$upload."M/".$download."M'";
-				fwrite($fp, "\n".$sql);
-				$result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
-				
-				$sql = "INSERT INTO radreply (username, attribute, op, value) (SELECT '".$mac."', 'Fall-Through', '=', 'Yes' WHERE NOT EXISTS(SELECT username FROM radreply WHERE username = '".$mac."' AND attribute = 'Fall-Through'))";
-				fwrite($fp, "\n".$sql);
-				$result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
-				
+			$needsRadReplyFallThrough = 1;
+			$download = $json['extraData']['entity']['downloadSpeedOverride'];
+			$upload = $json['extraData']['entity']['uploadSpeedOverride'];
+			fwrite($fp, "\nApplying speed override ".$download."/".$upload." to ".$mac);
+
+			$sql = "INSERT INTO radreply (username, attribute, op, value) (SELECT '".$mac."', 'Mikrotik-Rate-Limit', '=', '".$upload."M/".$download."M' WHERE NOT EXISTS(SELECT username FROM radreply WHERE username = '".$mac."' AND attribute = 'Mikrotik-Rate-Limit'))";
+			fwrite($fp, "\n".$sql);
+			$result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
+
+			$sql = "UPDATE radreply SET value = '".$upload."M/".$download."M' WHERE username = '".$mac."' AND attribute = 'Mikrotik-Rate-Limit' AND value <> '".$upload."M/".$download."M'";
+			fwrite($fp, "\n".$sql);
+			$result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
+
+//			$sql = "INSERT INTO radreply (username, attribute, op, value) (SELECT '".$mac."', 'Fall-Through', '=', 'Yes' WHERE NOT EXISTS(SELECT username FROM radreply WHERE username = '".$mac."' AND attribute = 'Fall-Through'))";
+//			fwrite($fp, "\n".$sql);
+//			$result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
 		} else {
-				fwrite($fp, "\nCleariing speed override".$sql);
-				$sql = "DELETE FROM radreply WHERE username = '".$mac."' AND attribute = 'Mikrotik-Rate-Limit'";
+			fwrite($fp, "\nCleariing speed override".$sql);
+			$sql = "DELETE FROM radreply WHERE username = '".$mac."' AND attribute = 'Mikrotik-Rate-Limit'";
+			fwrite($fp, "\n".$sql);
+			$result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
+		}
+
+		if (count($framedRouteArray) > 0) {
+			$needsRadReplyFallThrough = 1;
+			// insert framed route for certain MAC address
+			foreach ($framedRouteArray as $route) {
+				//$sql = "INSERT INTO radreply (username, attribute, op, value) (SELECT '".$mac."', 'Framed-Route', '=', '".trim($route)."') WHERE NOT EXISTS(SELECT username FROM radreply WHERE username = '".$mac."' AND attribute = 'Framed-Route' AND value = '".$route."')";
+				$sql = "INSERT INTO radreply (username, attribute, op, value) (SELECT '".$mac."', 'Framed-Route', '=', '".$route."' WHERE NOT EXISTS(SELECT username FROM radreply WHERE username = '".$mac."' AND attribute = 'Framed-Route' AND value = '".$route."'))";
 				fwrite($fp, "\n".$sql);
-				$result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
-				
-				$sql = "DELETE FROM radreply WHERE username = '".$mac."' AND attribute = 'Fall-Through'";
-				fwrite($fp, "\n".$sql);
-				$result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
-				
+	                        $result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
+			}
+			// remove any framed routes that are no longer applied to MAC address
+			$sql = "DELETE FROM radreply WHERE username = '".$mac."' AND attribute = 'Framed-Route' AND value NOT IN ('".implode("','", $framedRouteArray)."')";
+			fwrite($fp, "\n".$sql);
+                        $result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
+
+		} else {
+			$sql = "DELETE FROM radreply WHERE username = '".$mac."' AND attribute = 'Framed-Route'";
+			fwrite($fp, "\n".$sql);
+                        $result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
+		}
+
+		if ($needsRadReplyFallThrough == 1) {
+			// add Fall-Through attribute
+			$sql = "INSERT INTO radreply (username, attribute, op, value) (SELECT '".$mac."', 'Fall-Through', '=', 'Yes' WHERE NOT EXISTS(SELECT username FROM radreply WHERE username = '".$mac."' AND attribute = 'Fall-Through'))";
+
+                        fwrite($fp, "\n".$sql);
+                        $result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
+		} else {
+			$sql = "DELETE FROM radreply WHERE username = '".$mac."' AND attribute = 'Fall-Through'";
+                        fwrite($fp, "\n".$sql);
+                        $result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
 		}
 
 		switch (intval($json['extraData']['entity']['status'])) {
@@ -118,14 +149,14 @@ if ($json['extraData']['entity']['servicePlanType'] == 'Internet') {
 						fwrite($fp, "\nActive Service");
 						
 						// see if an existing profile (not this one) has the same MAC address.  Remove the mac address from the old profile if so.
-						$nonActiveServices = ucrmGET("/clients/services?customAttributeId=".$customAttribKeyForMAC."&customAttributeValue=".$mac);
+						$nonActiveServices = ucrmGET("/clients/services?customAttributeId=".$uispCustomAttribDeviceMac."&customAttributeValue=".$mac);
 						foreach ($nonActiveServices as $oldService) {
 							if (intval($oldService['status']) !== 0 && intval($oldService['status']) !== 1) {
 								fwrite($fp, "\nAlready ENDED service for MAC ".$mac." detected.  Removing reference to MAC");
 								foreach ($oldService['attributes'] as $attrib) {
 									if (strtolower($attrib['key']) == "devicemac" && strtolower($attrib['value']) == strtolower($mac)) {
 										$uArr = [];
-										$uArr['attributes'][] = array('value' => "", 'customAttributeId' => $customAttribKeyForMAC);
+										$uArr['attributes'][] = array('value' => "", 'customAttributeId' => $uispCustomAttribDeviceMac);
 										$uDelete = ucrmPATCH("clients/services/".$oldService['id'], json_encode($uArr));
 										fwrite($fp, "\nRemoved MAC ".$mac." from service ID: ".$oldService['id']);
 									}
