@@ -26,11 +26,13 @@
 # This portion of the script is responible for telling the DHCP server about the queue name so it can be referenced by external processes
 # Modify radiusHost to match the hostname and port of your radius host VM
 #
+  :local hostname [/ip dhcp lease get [find where address=$leaseActIP] host-name];
   :local queue [/queue/simple/get value-name=name [/queue/simple/find where target~$leaseActIP]];
 
   :global postData "";
    :set postData ($postData."{");
     :set postData ($postData."\"queue\": \"".$queue."\",");
+    :set postData ($postData."\"hostname\": \"".$hostname."\",");
     :set postData ($postData."\"mac\": \"".$leaseActMAC."\",");
     :set postData ($postData."\"ip\": \"".$leaseActIP."\"");
    :set postData ($postData." }");
