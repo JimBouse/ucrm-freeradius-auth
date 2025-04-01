@@ -98,7 +98,7 @@ if ($json['extraData']['entity']['servicePlanType'] == 'Internet') {
 //			fwrite($fp, "\n".$sql);
 //			$result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
 		} else {
-			fwrite($fp, "\nCleariing speed override".$sql);
+			fwrite($fp, "\nClearing speed override\n".$sql);
 			$sql = "DELETE FROM radreply WHERE username = '".$mac."' AND attribute = 'Mikrotik-Rate-Limit'";
 			fwrite($fp, "\n".$sql);
 			$result = mysqli_query($link,$sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error(), E_USER_ERROR);
