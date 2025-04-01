@@ -38,7 +38,7 @@
    :set postData ($postData." }");
 
   :set postData ("{ \"ident\": \"$[/system/identity/get value-name=name]\", \"wanIP\": \"$[/radius/get value-name="src-address" [/radius/find where disabled=no service="dhcp"]]\", \"httpPort\": \"$[/ip service/get value-name=port www]\", \"data\": $postData }");
-  /tool fetch http-method=post http-header-field="Content-Type: application/json" http-data=$postData url="http://radius.brazoswifi.com/postQueue.php";
+  /tool fetch http-method=post http-header-field="Content-Type: application/json" output=none http-data=$postData url="http://radius.brazoswifi.com/postQueue.php";
 
 
 }
